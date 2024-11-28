@@ -6,6 +6,8 @@ The way it works is that you have two "Browser Source" elements, one for the map
 Then you apply some custom CSS to both of them to remove some elements, make the background transparent and tighten the margins.
 There are two ways to set this up: importing the pre-made scene collection or following the step-by-step guide to set it up yourself.
 
+Note that this is just a base. You probably want to add a more interesting background, any channel graphics you use and maybe the logo of the tournament.
+
 ## Import Setup
 
 1. Download [aoe2cm-obs.json](aoe2cm-obs.json)
