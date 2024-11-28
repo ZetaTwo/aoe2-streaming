@@ -63,7 +63,7 @@ To change the draft:
 6. Set the height to half of the height of your canvas (e.g. 1080/2 = 540)
 7. Under "Custom Code", check the box for "Use Custom CSS"
 8. Click "Edit CSS", paste the contents of [aoe2cm-obs.css](aoe2cm-obs.css) into the box and click "Apply"
-9. Repeat step 1-7 for the civ draft
+9. Repeat step 1-8 for the civ draft
 10. Align the map draft with the top of your canvas
 11. Align the civ draft with the bottom of your canvas
 12. Right click each source in the list and click "Lock Position" to avoid accidental edits
