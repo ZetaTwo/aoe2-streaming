@@ -1,0 +1,325 @@
+{
+    "current_scene": "AoE2 - Map + Civ Draft",
+    "current_program_scene": "AoE2 - Map + Civ Draft",
+    "scene_order": [
+        {
+            "name": "AoE2 - Map + Civ Draft"
+        }
+    ],
+    "name": "AoE2",
+    "groups": [],
+    "quick_transitions": [
+        {
+            "name": "Klipp",
+            "duration": 300,
+            "hotkeys": [],
+            "id": 11,
+            "fade_to_black": false
+        },
+        {
+            "name": "Tona",
+            "duration": 300,
+            "hotkeys": [],
+            "id": 12,
+            "fade_to_black": false
+        },
+        {
+            "name": "Tona",
+            "duration": 300,
+            "hotkeys": [],
+            "id": 13,
+            "fade_to_black": true
+        }
+    ],
+    "transitions": [],
+    "saved_projectors": [],
+    "current_transition": "Tona",
+    "transition_duration": 300,
+    "preview_locked": false,
+    "scaling_enabled": false,
+    "scaling_level": 0,
+    "scaling_off_x": 0.0,
+    "scaling_off_y": 0.0,
+    "virtual-camera": {
+        "type2": 3
+    },
+    "modules": {
+        "scripts-tool": [],
+        "output-timer": {
+            "streamTimerHours": 0,
+            "streamTimerMinutes": 0,
+            "streamTimerSeconds": 30,
+            "recordTimerHours": 0,
+            "recordTimerMinutes": 0,
+            "recordTimerSeconds": 30,
+            "autoStartStreamTimer": false,
+            "autoStartRecordTimer": false,
+            "pauseRecordTimer": true
+        },
+        "auto-scene-switcher": {
+            "interval": 300,
+            "non_matching_scene": "",
+            "switch_if_not_matching": false,
+            "active": false,
+            "switches": []
+        },
+        "captions": {
+            "source": "",
+            "enabled": false,
+            "lang_id": 2057,
+            "provider": "mssapi"
+        }
+    },
+    "sources": [
+        {
+            "prev_ver": 503447555,
+            "name": "AoE2 - Map + Civ Draft",
+            "uuid": "cb587f07-ed4e-421e-8f86-fc613c3dd1bd",
+            "id": "scene",
+            "versioned_id": "scene",
+            "settings": {
+                "id_counter": 3,
+                "custom_size": false,
+                "items": [
+                    {
+                        "name": "Example Background",
+                        "source_uuid": "0d341700-babe-413e-99c3-a51adbfcce91",
+                        "visible": true,
+                        "locked": false,
+                        "rot": 0.0,
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "align": 5,
+                        "bounds_type": 2,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "bounds": {
+                            "x": 1920.0,
+                            "y": 1080.0
+                        },
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 2,
+                        "group_item_backup": false,
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    },
+                    {
+                        "name": "Map draft",
+                        "source_uuid": "73f3fc6b-6dd4-46bd-8846-ae91996a7f8a",
+                        "visible": true,
+                        "locked": true,
+                        "rot": 0.0,
+                        "pos": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "align": 5,
+                        "bounds_type": 2,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "bounds": {
+                            "x": 1920.0,
+                            "y": 542.0
+                        },
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 1,
+                        "group_item_backup": false,
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    },
+                    {
+                        "name": "Civ draft",
+                        "source_uuid": "3428a734-b7c2-42b4-885a-8b0cf1a47538",
+                        "visible": true,
+                        "locked": true,
+                        "rot": 0.0,
+                        "pos": {
+                            "x": 0.0,
+                            "y": 540.0
+                        },
+                        "scale": {
+                            "x": 1.0,
+                            "y": 1.0
+                        },
+                        "align": 5,
+                        "bounds_type": 0,
+                        "bounds_align": 0,
+                        "bounds_crop": false,
+                        "bounds": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "crop_left": 0,
+                        "crop_top": 0,
+                        "crop_right": 0,
+                        "crop_bottom": 0,
+                        "id": 3,
+                        "group_item_backup": false,
+                        "scale_filter": "disable",
+                        "blend_method": "default",
+                        "blend_type": "normal",
+                        "show_transition": {
+                            "duration": 0
+                        },
+                        "hide_transition": {
+                            "duration": 0
+                        },
+                        "private_settings": {}
+                    }
+                ]
+            },
+            "mixers": 0,
+            "sync": 0,
+            "flags": 0,
+            "volume": 1.0,
+            "balance": 0.5,
+            "enabled": true,
+            "muted": false,
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "hotkeys": {
+                "OBSBasic.SelectScene": [],
+                "libobs.show_scene_item.1": [],
+                "libobs.hide_scene_item.1": [],
+                "libobs.show_scene_item.2": [],
+                "libobs.hide_scene_item.2": [],
+                "libobs.show_scene_item.3": [],
+                "libobs.hide_scene_item.3": []
+            },
+            "deinterlace_mode": 0,
+            "deinterlace_field_order": 0,
+            "monitoring_type": 0,
+            "private_settings": {}
+        },
+        {
+            "prev_ver": 503447555,
+            "name": "Civ draft",
+            "uuid": "3428a734-b7c2-42b4-885a-8b0cf1a47538",
+            "id": "browser_source",
+            "versioned_id": "browser_source",
+            "settings": {
+                "width": 1920,
+                "height": 540,
+                "url": "https://aoe2cm.net/draft/eJTzn",
+                "css": "/* Remove background */\nhtml, body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }\n\n/* Remove header & footer */\nnav { display:none !important; }\nfooter { display:none; }\n\n/* Remove unnecessary UI elements */\n#messages { display:none; }\n#replay-controls { display:none; }\n#draft-id-info { display:none; }\n#toggles { display:none; }\n#how-it-works { display:none; }\n\n/* Remove draft title */\n#container > div:first-child { display: none; }\n\n/* Remove border and background from draft boxes */\n#player-host > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#player-guest > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#player-none > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#civgrid { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n\n/* Tighter padding */\n.turn-row { padding: 0 !important; margin-top: 0 !important; }\n.player-panels { padding: 0 !important; margin-top: 10px !important; }\n#player-host { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-host > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-guest { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-guest > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-none { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-none > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n\n/* Remove pick order box */\n.turn-row { display: none !important; }\n\n/* Remove map/civ pool */\n#civgrid { display: none; }\n\n/* Remove player role label */\n.captains-line { display: none; }"
+            },
+            "mixers": 255,
+            "sync": 0,
+            "flags": 0,
+            "volume": 1.0,
+            "balance": 0.5,
+            "enabled": true,
+            "muted": false,
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "hotkeys": {
+                "libobs.mute": [],
+                "libobs.unmute": [],
+                "libobs.push-to-mute": [],
+                "libobs.push-to-talk": [],
+                "ObsBrowser.Refresh": []
+            },
+            "deinterlace_mode": 0,
+            "deinterlace_field_order": 0,
+            "monitoring_type": 0,
+            "private_settings": {}
+        },
+        {
+            "prev_ver": 503447555,
+            "name": "Example Background",
+            "uuid": "0d341700-babe-413e-99c3-a51adbfcce91",
+            "id": "color_source",
+            "versioned_id": "color_source_v3",
+            "settings": {
+                "color": 4294963184
+            },
+            "mixers": 0,
+            "sync": 0,
+            "flags": 0,
+            "volume": 1.0,
+            "balance": 0.5,
+            "enabled": true,
+            "muted": false,
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "hotkeys": {},
+            "deinterlace_mode": 0,
+            "deinterlace_field_order": 0,
+            "monitoring_type": 0,
+            "private_settings": {}
+        },
+        {
+            "prev_ver": 503447555,
+            "name": "Map draft",
+            "uuid": "73f3fc6b-6dd4-46bd-8846-ae91996a7f8a",
+            "id": "browser_source",
+            "versioned_id": "browser_source",
+            "settings": {
+                "url": "https://aoe2cm.net/draft/PDwna",
+                "width": 1920,
+                "height": 540,
+                "css": "/* Remove background */\nhtml, body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }\n\n/* Remove header & footer */\nnav { display:none !important; }\nfooter { display:none; }\n\n/* Remove unnecessary UI elements */\n#messages { display:none; }\n#replay-controls { display:none; }\n#draft-id-info { display:none; }\n#toggles { display:none; }\n#how-it-works { display:none; }\n\n/* Remove draft title */\n#container > div:first-child { display: none; }\n\n/* Remove border and background from draft boxes */\n#player-host > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#player-guest > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#player-none > .player { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n#civgrid { background-color: rgba(0, 0, 0, 0); border: 0; box-shadow: none; }\n\n/* Tighter padding */\n.turn-row { padding: 0 !important; margin-top: 0 !important; }\n.player-panels { padding: 0 !important; margin-top: 10px !important; }\n#player-host { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-host > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-guest { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-guest > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-none { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n#player-none > .player { padding-top: 0; padding-bottom: 0; margin-top: 0; margin-bottom: 0; }\n\n/* Remove pick order box */\n.turn-row { display: none !important; }\n\n/* Remove map/civ pool */\n#civgrid { display: none; }\n\n/* Remove player role label */\n.captains-line { display: none; }"
+            },
+            "mixers": 255,
+            "sync": 0,
+            "flags": 0,
+            "volume": 1.0,
+            "balance": 0.5,
+            "enabled": true,
+            "muted": false,
+            "push-to-mute": false,
+            "push-to-mute-delay": 0,
+            "push-to-talk": false,
+            "push-to-talk-delay": 0,
+            "hotkeys": {
+                "libobs.mute": [],
+                "libobs.unmute": [],
+                "libobs.push-to-mute": [],
+                "libobs.push-to-talk": [],
+                "ObsBrowser.Refresh": []
+            },
+            "deinterlace_mode": 0,
+            "deinterlace_field_order": 0,
+            "monitoring_type": 0,
+            "private_settings": {}
+        }
+    ]
+}
