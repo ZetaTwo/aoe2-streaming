@@ -10,6 +10,7 @@ Note that this is just a base. You probably want to add a more interesting backg
 
 - [OBS Studio Instructions](#obs-studio-instructions)
 - [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
+- [Notes on Customization](#customization)
 
 ## Preview
 
