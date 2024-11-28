@@ -67,3 +67,11 @@ To change the draft:
 10. Align the map draft with the top of your canvas
 11. Align the civ draft with the bottom of your canvas
 12. Right click each source in the list and click "Lock Position" to avoid accidental edits
+
+## Customization
+
+I have tried structuring the CSS code so that it is clear what each section does.
+If you know CSS you can tweak it to suit your needs. For example, by default the pick/ban order box is hidden as well as the map pool.
+If you want to show either of them, simply comment out (with /* */) or remove the CSS section responsible for that.
+If you want to modify the margins between the items, check out the padding/margin properties in that section.
+You might also want to add back the background or border for the player boxes. Try it out and see what works best for you.
