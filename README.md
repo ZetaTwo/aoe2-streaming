@@ -51,6 +51,15 @@ This is what it can look like once you have set it up:
 10. Align the civ draft with the bottom of your canvas
 11. Click the lock icon on both sources to avoid accidental edits
 
+#### Interacting with the Draft
+
+To interact with the draft, i.e. setting the win, loss, pick, etc status:
+
+1. In the list, click the browser source of the draft you want to interact with.
+2. Click the "interact" button.
+3. A window pops up. You can use it to interact with the draft as you would in your browser.
+4. Once you are done, close the window.
+
 #### Changing Drafts
 
 To change the draft:
