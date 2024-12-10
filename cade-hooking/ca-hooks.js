@@ -1,0 +1,166 @@
+const aoeSoundEvents = {
+    '4272164677': "PLAY_AGE_UP",
+    '2453267296': "PLAY_VICTORY",
+    '324646143': "PLAY_DEFEAT",
+    '3748861528': "PLAY_TOWNBELL_START",
+    '2237803748': "PLAY_TOWNBELL_STOP",
+    '1709106999': "PLAY_UNDER_ATTACK",
+    '3398741292': "PLAY_TOWN_UNDER_ATTACK",
+    '2107254885': "PLAY_ANIMAL_ATTACK",
+    '2781753775': "PLAY_MONK_CONVERT_COMPLETE",
+    '2723491801': "PLAY_VILLAGER_CREATED",
+    '1317625478': "PLAY_COMBAT_UNIT_CREATED",
+    '1505139509': "PLAY_BOAT_CREATED",
+    '1256550955': "PLAY_TECHNOLOGY_RESEARCHED",
+    '2568766646': "PLAY_CHAT_RECEIVED",
+    '948945028': "PLAY_SPY_INFILTRATION",
+    '2580125737': "PLAY_WONDER_STARTED",
+    '336273150': "PLAY_WONDER_SELECT",
+    '3398752111': "PLAY_WONDER_DESTROYED",
+    '3959929389': "PLAY_WONDER_COMPLETED",
+    '3521982396': "PLAY_TAUNT_01",
+    '3521982399': "PLAY_TAUNT_02",
+    '3521982398': "PLAY_TAUNT_03",
+    '3521982393': "PLAY_TAUNT_04",
+    '3521982392': "PLAY_TAUNT_05",
+    '3521982395': "PLAY_TAUNT_06",
+    '3521982394': "PLAY_TAUNT_07",
+    '3521982389': "PLAY_TAUNT_08",
+    '3521982388': "PLAY_TAUNT_09",
+    '3505204682': "PLAY_TAUNT_10",
+    '3505204683': "PLAY_TAUNT_11",
+    '1217387751': "PLAY_TAUNT_11_RANDOM",
+    '3505204680': "PLAY_TAUNT_12",
+    '3505204681': "PLAY_TAUNT_13",
+    '3505204686': "PLAY_TAUNT_14",
+    '3505204687': "PLAY_TAUNT_15",
+    '3505204684': "PLAY_TAUNT_16",
+    '3505204685': "PLAY_TAUNT_17",
+    '3505204674': "PLAY_TAUNT_18",
+    '3505204675': "PLAY_TAUNT_19",
+    '3488427095': "PLAY_TAUNT_20",
+    '3488427094': "PLAY_TAUNT_21",
+    '3488427093': "PLAY_TAUNT_22",
+    '3488427092': "PLAY_TAUNT_23",
+    '3488427091': "PLAY_TAUNT_24",
+    '3488427090': "PLAY_TAUNT_25",
+    '3488427089': "PLAY_TAUNT_26",
+    '3488427088': "PLAY_TAUNT_27",
+    '3488427103': "PLAY_TAUNT_28",
+    '3488427102': "PLAY_TAUNT_29",
+    '3471649508': "PLAY_TAUNT_30",
+    '3471649509': "PLAY_TAUNT_31",
+    '3471649510': "PLAY_TAUNT_32",
+    '3471649511': "PLAY_TAUNT_33",
+    '3471649504': "PLAY_TAUNT_34",
+    '3471649505': "PLAY_TAUNT_35",
+    '3471649506': "PLAY_TAUNT_36",
+    '3471649507': "PLAY_TAUNT_37",
+    '3471649516': "PLAY_TAUNT_38",
+    '3471649517': "PLAY_TAUNT_39",
+    '3454871921': "PLAY_TAUNT_40",
+    '3454871920': "PLAY_TAUNT_41",
+    '3454871923': "PLAY_TAUNT_42",
+    '3454871922': "PLAY_TAUNT_43",
+    '3454871925': "PLAY_TAUNT_44",
+    '3454871924': "PLAY_TAUNT_45",
+    '3454871927': "PLAY_TAUNT_46",
+    '3454871926': "PLAY_TAUNT_47",
+    '3454871929': "PLAY_TAUNT_48",
+    '3454871928': "PLAY_TAUNT_49",
+    '3438094238': "PLAY_TAUNT_50",
+    '3438094239': "PLAY_TAUNT_51",
+    '3438094236': "PLAY_TAUNT_52",
+    '3438094237': "PLAY_TAUNT_53",
+    '3438094234': "PLAY_TAUNT_54",
+    '3438094235': "PLAY_TAUNT_55",
+    '3438094232': "PLAY_TAUNT_56",
+    '3438094233': "PLAY_TAUNT_57",
+    '3438094230': "PLAY_TAUNT_58",
+    '3438094231': "PLAY_TAUNT_59",
+    '3421316651': "PLAY_TAUNT_60",
+    '3421316650': "PLAY_TAUNT_61",
+    '3421316649': "PLAY_TAUNT_62",
+    '3421316648': "PLAY_TAUNT_63",
+    '3421316655': "PLAY_TAUNT_64",
+    '3421316654': "PLAY_TAUNT_65",
+    '3421316653': "PLAY_TAUNT_66",
+    '3421316652': "PLAY_TAUNT_67",
+    '3421316643': "PLAY_TAUNT_68",
+    '3421316642': "PLAY_TAUNT_69",
+    '3404539064': "PLAY_TAUNT_70",
+    '3404539065': "PLAY_TAUNT_71",
+    '3404539066': "PLAY_TAUNT_72",
+    '3404539067': "PLAY_TAUNT_73",
+    '3404539068': "PLAY_TAUNT_74",
+    '3404539069': "PLAY_TAUNT_75",
+    '3404539070': "PLAY_TAUNT_76",
+    '3404539071': "PLAY_TAUNT_77",
+    '3404539056': "PLAY_TAUNT_78",
+    '3404539057': "PLAY_TAUNT_79",
+    '3387761349': "PLAY_TAUNT_80",
+    '3387761348': "PLAY_TAUNT_81",
+    '3387761351': "PLAY_TAUNT_82",
+    '3387761350': "PLAY_TAUNT_83",
+    '3387761345': "PLAY_TAUNT_84",
+    '3387761344': "PLAY_TAUNT_85",
+    '3387761347': "PLAY_TAUNT_86",
+    '3387761346': "PLAY_TAUNT_87",
+    '3387761357': "PLAY_TAUNT_88",
+    '3387761356': "PLAY_TAUNT_89",
+    '3370983762': "PLAY_TAUNT_90",
+    '3370983763': "PLAY_TAUNT_91",
+    '3370983760': "PLAY_TAUNT_92",
+    '3370983761': "PLAY_TAUNT_93",
+    '3370983766': "PLAY_TAUNT_94",
+    '3370983767': "PLAY_TAUNT_95",
+    '3370983764': "PLAY_TAUNT_96",
+    '3370983765': "PLAY_TAUNT_97",
+    '3370983770': "PLAY_TAUNT_98",
+    '3370983771': "PLAY_TAUNT_99",
+    '2942244046': "PLAY_TAUNT_100",
+    '2942244047': "PLAY_TAUNT_101",
+    '2942244044': "PLAY_TAUNT_102",
+    '2942244045': "PLAY_TAUNT_103",
+    '2942244042': "PLAY_TAUNT_104",
+    '2942244043': "PLAY_TAUNT_105",
+    '2649857955': "PLAY_TAUNT_ALLY",
+    '3574673215': "PLAY_TAUNT_ENEMY",
+    '464455898': "PLAY_TAUNT_NEUTRAL",
+}
+
+const postEvents = [
+    {
+        shortname: 'PostEventInt',
+        name: '?PostEvent@SoundEngine@AK@@YAII_KIP6AXW4AkCallbackType@@PEAUAkCallbackInfo@@@ZPEAXIPEAUAkExternalSourceInfo@@I@Z',
+        callback: {
+            onEnter(args) {
+                if(args[1] != 7) {
+                    return;
+                }
+                const eventId = args[0];
+                const eventName = aoeSoundEvents[eventId.toString(10)];
+                if(eventName) {
+                    send({type: 'sound', event: eventName});
+                } else {
+                    send({type: 'sound', event: 'UNKNOWN'});
+                }
+            }
+        }
+    },
+];
+
+const main = () => {
+    const cade = Process.findModuleByName('cade.node');
+    if (!cade) {
+        console.log('Could not find "cade.node", aborting');
+        return
+    }
+
+    for (const postEvent of postEvents) {
+        const postEventAddress = cade.findExportByName(postEvent.name);
+        Interceptor.attach(postEventAddress, postEvent.callback);
+    }
+}
+
+main();
