@@ -1,24 +1,44 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useStandingsStore } from '@/stores/standings'
+import BracketStanding from '@/components/BracketStanding.vue'
 
 const standingsStore = useStandingsStore()
+const selectedBracket = ref<string | null>(null)
 
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search)
   const tournamentId = urlParams.get('tournament')
+  selectedBracket.value = urlParams.get('bracket')
+
   if (tournamentId) {
     standingsStore.fetchTournament(tournamentId)
   }
 })
+
+const displayedBrackets = computed(() => {
+  if (!selectedBracket.value) return standingsStore.brackets
+  return standingsStore.brackets.filter((b) => b.name === selectedBracket.value)
+})
 </script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <main class="app-main">
+    <div v-if="standingsStore.isLoading" class="loading-message">Loading standings...</div>
+    <div v-else-if="standingsStore.error" class="error">{{ standingsStore.error }}</div>
+    <div v-else class="brackets-container">
+      <BracketStanding
+        v-for="bracket in displayedBrackets"
+        :key="bracket.name"
+        :bracket="bracket"
+      />
+    </div>
+  </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+main {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.2rem;
+}
+</style>
