@@ -72,6 +72,35 @@ const TOURNAMENTS: Record<string, TournamentConfig> = {
       },
     ],
   },
+  tsdc: {
+    sheetId: '1K7j1QsXsO9tLecXjQZ08mzpMsjuJOy1d6iNLwSTCMmE',
+    brackets: [
+      {
+        name: 'Champions',
+        groupRanges: ['G4:P9', 'V4:AE9'],
+      },
+      {
+        name: 'Monks',
+        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+        name: 'Mangonels',
+        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+        name: 'Knights',
+        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+        name: 'Crossbows',
+        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+        name: 'Militia',
+        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+    ],
+  },
 }
 
 export function getTournamentConfig(tournamentName: string): TournamentConfig | undefined {
@@ -93,7 +122,7 @@ export const useStandingsStore = defineStore('standings', () => {
       }
 
       const ranges = bracketsConfig.flatMap((bracket) =>
-        bracket.groupRanges.map((range) => `'${bracket.name}'!${range}`)
+        bracket.groupRanges.map((range) => `'${bracket.name}'!${range}`),
       )
       const rangesQuery = ranges.map((r) => `ranges=${encodeURIComponent(r)}`).join('&')
       const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?${rangesQuery}&key=${apiKey}`
