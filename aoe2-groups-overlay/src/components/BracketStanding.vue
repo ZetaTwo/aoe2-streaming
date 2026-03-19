@@ -34,5 +34,12 @@ defineProps<{
 
 .bracket-title {
   text-align: center;
+  background-color: #222;
+  border: 2px solid #555;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 2rem;
+  width: max-content;
+  margin: 0 auto 2rem;
 }
 </style>

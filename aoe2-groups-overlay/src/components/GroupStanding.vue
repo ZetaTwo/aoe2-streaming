@@ -33,6 +33,17 @@ defineProps<{
   flex-direction: column;
 }
 
+.group-title {
+  background-color: #222;
+  border: 2px solid #555;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 2rem;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
 table {
   border-collapse: separate;
   border-spacing: 0;
@@ -44,7 +55,10 @@ table {
 }
 
 th {
-  background-color: #333;
+  background-color: #111;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  position: relative;
+  z-index: 1;
 }
 
 th,
