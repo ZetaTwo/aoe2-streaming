@@ -19,7 +19,17 @@ defineProps<{
 <style scoped>
 .groups-container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, max-content);
+  justify-content: center;
+  gap: 3rem;
+}
+
+.groups-container > :nth-child(odd) {
+  justify-self: end;
+}
+
+.groups-container > :nth-child(even) {
+  justify-self: start;
 }
 
 .bracket-title {
