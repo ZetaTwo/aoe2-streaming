@@ -38,7 +38,14 @@ const displayedBrackets = computed(() => {
 
 <style scoped>
 main {
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
   font-size: 1.2rem;
 }
 </style>

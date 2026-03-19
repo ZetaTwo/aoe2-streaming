@@ -69,9 +69,9 @@ describe('Standings Store', () => {
       statusText: 'Not Found',
     })
 
-    await expect(store.fetchStandings('mock_sheet_id', [{ name: 'Group A', groupRanges: ['A1:J3'] }])).rejects.toThrow(
-      'Failed to fetch',
-    )
+    await expect(
+      store.fetchStandings('mock_sheet_id', [{ name: 'Group A', groupRanges: ['A1:J3'] }]),
+    ).rejects.toThrow('Failed to fetch')
 
     expect(store.error).toContain('Failed to fetch')
     expect(store.isLoading).toBe(false)
@@ -81,9 +81,9 @@ describe('Standings Store', () => {
     vi.stubEnv('VITE_GOOGLE_SHEETS_API_KEY', '')
     const store = useStandingsStore()
 
-    await expect(store.fetchStandings('mock_sheet_id', [{ name: 'Group A', groupRanges: ['A1:J3'] }])).rejects.toThrow(
-      'Google Sheets API key is missing',
-    )
+    await expect(
+      store.fetchStandings('mock_sheet_id', [{ name: 'Group A', groupRanges: ['A1:J3'] }]),
+    ).rejects.toThrow('Google Sheets API key is missing')
 
     expect(store.error).toContain('missing')
   })
@@ -125,7 +125,7 @@ describe('Standings Store', () => {
     expect(store.isLoading).toBe(false)
     expect(store.error).toBe(null)
     expect(store.brackets.length).toBe(9)
-    
+
     const bracket = store.brackets[0]!
     expect(bracket.name).toBe('Champions')
     expect(bracket.groups.length).toBe(1)

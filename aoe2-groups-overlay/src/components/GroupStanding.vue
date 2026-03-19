@@ -20,11 +20,7 @@ defineProps<{
         </tr>
       </thead>
       <tbody class="group-table-body">
-        <PlayerStandingRow
-          v-for="player in group.players"
-          :key="player.name"
-          :player="player"
-        />
+        <PlayerStandingRow v-for="player in group.players" :key="player.name" :player="player" />
       </tbody>
     </table>
   </div>
@@ -45,14 +41,16 @@ table {
   overflow: hidden;
 }
 
-th, :deep(td) {
+th,
+:deep(td) {
   text-align: center;
   padding: 0.5rem 1.25rem;
   border-bottom: 1px solid gray;
   border-right: 1px solid gray;
 }
 
-th:last-child, :deep(td:last-child) {
+th:last-child,
+:deep(td:last-child) {
   border-right: none;
 }
 
@@ -60,7 +58,8 @@ th:last-child, :deep(td:last-child) {
   border-bottom: none;
 }
 
-.group-table-header-player, :deep(.player-standing-name) {
+.group-table-header-player,
+:deep(.player-standing-name) {
   text-align: left;
 }
 </style>

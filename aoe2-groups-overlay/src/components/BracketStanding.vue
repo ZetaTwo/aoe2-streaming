@@ -11,11 +11,7 @@ defineProps<{
   <div class="bracket-standing">
     <h2 class="bracket-title">{{ bracket.name }} Bracket</h2>
     <div class="groups-container">
-      <GroupStandingTable
-        v-for="group in bracket.groups"
-        :key="group.name"
-        :group="group"
-      />
+      <GroupStandingTable v-for="group in bracket.groups" :key="group.name" :group="group" />
     </div>
   </div>
 </template>
