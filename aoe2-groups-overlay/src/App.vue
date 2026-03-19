@@ -47,5 +47,7 @@ main {
     Arial,
     sans-serif;
   font-size: 1.2rem;
+  font-weight: bold;
+  color: #e0e0e0;
 }
 </style>

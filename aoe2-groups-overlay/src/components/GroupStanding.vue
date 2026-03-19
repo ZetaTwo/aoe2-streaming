@@ -36,17 +36,23 @@ defineProps<{
 table {
   border-collapse: separate;
   border-spacing: 0;
-  border: 1px solid gray;
+  border: 2px solid #555;
   border-radius: 8px;
   overflow: hidden;
+  background-color: #222;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+th {
+  background-color: #333;
 }
 
 th,
 :deep(td) {
   text-align: center;
   padding: 0.5rem 1.25rem;
-  border-bottom: 1px solid gray;
-  border-right: 1px solid gray;
+  border-bottom: 2px solid #555;
+  border-right: 2px solid #555;
 }
 
 th:last-child,
