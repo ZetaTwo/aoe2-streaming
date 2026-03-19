@@ -1,4 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useStandingsStore } from '@/stores/standings'
+
+const standingsStore = useStandingsStore()
+
+onMounted(() => {
+  const urlParams = new URLSearchParams(window.location.search)
+  const tournamentId = urlParams.get('tournament')
+  if (tournamentId) {
+    standingsStore.fetchTournament(tournamentId)
+  }
+})
+</script>
 
 <template>
   <h1>You did it!</h1>
