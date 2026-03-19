@@ -1,54 +1,62 @@
-# aoe2-groups-overlay
+# AoE2 Tournament Groups Overlay
 
-This template should help get you started developing with Vue 3 in Vite.
+When casting Age of Empires 2 tournament games, it is usually nice to be able to show the current standings of the group stages.
+This repository provides a web-based overlay that you can easily add as a Browser Source in OBS or XSplit. It fetches real-time standings directly from the tournament's Google Sheets and formats them into a clean, easy-to-read, stream-friendly grid.
 
-## Recommended IDE Setup
+- [OBS Studio Instructions](#obs-studio-instructions)
+- [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
+- [Changing Tournaments & Brackets](#changing-tournaments--brackets)
+- [Customization](#customization)
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## OBS Studio Instructions
 
-## Recommended Browser Setup
+1. Create a new source of type "Browser Source"
+2. Go to the source settings
+3. Enter the following URL to load a specific tournament and bracket:
+   `https://aoe2streaming.zeta-two.com/?tournament=tsdc&bracket=Champions`
+4. Set the width and height to match your canvas or the desired area (e.g. Width `1920` and Height `1080`)
+5. Clear the default text in the "Custom CSS" box (unless you plan to add your own styling). The overlay has a transparent background by default.
+6. Click Ok
+7. Move and resize the browser source on your canvas as needed
+8. Click the lock icon on the source to avoid accidental edits
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## XSplit Broadcaster Setup
 
-## Type Support for `.vue` Imports in TS
+1. Click "Add Source" -> "Webpage"
+2. Enter the URL: `https://aoe2streaming.zeta-two.com/?tournament=tsdc&bracket=Champions` and click "Ok"
+3. Right-click the newly created source in the list and click "Settings"
+4. Under "Display", select custom resolution
+5. Set the width and height to match your canvas or desired area (e.g. `1920x1080`)
+6. Right-click the source in the list and click "Lock Position" to avoid accidental edits
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Changing Tournaments & Brackets
 
-## Customize configuration
+You can change which tournament and bracket is displayed by modifying the URL parameters at the end of the link:
+- `tournament`: The ID of the tournament (e.g. `tsdc` or `tcc2`).
+- `bracket`: The name of the specific bracket/division to show (e.g. `Champions`, `Monks`, `Knights`, etc.).
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+For example, to show the Monks bracket for the TCC2 tournament, your URL would be:
+`https://aoe2streaming.zeta-two.com/?tournament=tcc2&bracket=Monks`
 
-## Project Setup
+*Note: If you omit the `bracket` parameter, the overlay will attempt to display all brackets for the tournament at once, which may heavily clutter your screen.*
 
-```sh
-pnpm install
-```
+## Customization
 
-### Compile and Hot-Reload for Development
+The overlay is designed to look great out-of-the-box on stream, with soft dark colors, drop shadows, and a transparent background to blend over your gameplay. 
+However, if you know a bit of CSS, the app is built with highly descriptive class names so you can easily customize it via the "Custom CSS" box in OBS.
 
-```sh
-pnpm dev
-```
+Here are some of the key classes you can target:
+- `.app-main`: The main container for the whole page.
+- `.bracket-title`: The header for the entire bracket.
+- `.group-table`: The table element for a specific group.
+- `.group-title`: The header for a specific group.
+- `.group-table-header-row`, `.group-table-header-rank`, etc.: The header rows and specific column headers.
+- `.player-standing-row`: The row containing a specific player's stats.
+- `.player-standing-name`, `.player-standing-sets`, etc.: Individual stat cells for a player.
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-pnpm test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-pnpm lint
+For example, to make the player names yellow, you could add this to the Custom CSS box in OBS:
+```css
+.player-standing-name {
+  color: #ffd700 !important;
+}
 ```
