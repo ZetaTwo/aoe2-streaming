@@ -11,6 +11,12 @@ Note that this is just a base. You probably want to add a more interesting backg
 - [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
 - [Notes on Customization](#customization)
 
+## Preview
+
+This is what it can look like once you have set it up:
+
+![OBS AoE2 Insights preview](aoe2insights-obs.png)
+
 ## OBS Studio Instructions
 
 ### Manual Setup
