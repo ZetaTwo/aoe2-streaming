@@ -1,0 +1,19 @@
+/* Remove background */
+body { background-color: rgba(0, 0, 0, 0); margin: 0px auto; overflow: hidden; }
+
+/* Remove header */
+header { display: none !important; }
+
+/* Remove various elements */
+.content-sidebar-aside { display: none !important; }
+.user-nav { display: none !important; }
+.award-progress-sidebar { display: none !important; }
+.avatar { width: 50% !important; }
+.stats-grid { padding: 0 !important; }
+.user-social { display: none !important; }
+.user-about-text { display: none !important; }
+.user-statistics lazy-fetch > div:nth-child(2) { display: none !important; }
+.profile-outdated { display: none !important; }
+.content-aside { display: none !important; }
+sponsor-placement { display: none !important; }
+.content { display: block !important; }
