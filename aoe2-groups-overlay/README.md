@@ -8,6 +8,12 @@ This repository provides a web-based overlay that you can easily add as a Browse
 - [Changing Tournaments & Brackets](#changing-tournaments--brackets)
 - [Customization](#customization)
 
+## Preview
+
+This is what it can look like once you have set it up:
+
+![OBS AoE2 Groups preview](aoe2groups-overlay.png)
+
 ## OBS Studio Instructions
 
 1. Create a new source of type "Browser Source"
