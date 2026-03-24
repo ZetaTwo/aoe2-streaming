@@ -19,7 +19,7 @@ This is what it can look like once you have set it up:
 1. Create a new source of type "Browser Source"
 2. Go to the source settings
 3. Enter the following URL to load a specific tournament and bracket:
-   `https://aoe2streaming.zeta-two.com/?tournament=tsdc&bracket=Champions`
+   `https://aoe2streaming.zeta-two.com/?tournament=ttlc2&bracket=Tin`
 4. Set the width and height to match your canvas or the desired area (e.g. Width `1920` and Height `1080`)
 5. Clear the default text in the "Custom CSS" box (unless you plan to add your own styling). The overlay has a transparent background by default.
 6. Click Ok
@@ -29,7 +29,7 @@ This is what it can look like once you have set it up:
 ## XSplit Broadcaster Setup
 
 1. Click "Add Source" -> "Webpage"
-2. Enter the URL: `https://aoe2streaming.zeta-two.com/?tournament=tsdc&bracket=Champions` and click "Ok"
+2. Enter the URL: `https://aoe2streaming.zeta-two.com/?tournament=ttlc2&bracket=Tin` and click "Ok"
 3. Right-click the newly created source in the list and click "Settings"
 4. Under "Display", select custom resolution
 5. Set the width and height to match your canvas or desired area (e.g. `1920x1080`)
@@ -38,7 +38,7 @@ This is what it can look like once you have set it up:
 ## Changing Tournaments & Brackets
 
 You can change which tournament and bracket is displayed by modifying the URL parameters at the end of the link:
-- `tournament`: The ID of the tournament (e.g. `tsdc` or `tcc2`).
+- `tournament`: The ID of the tournament (e.g. `ttlc2`, `tsdc` or `tcc2`).
 - `bracket`: The name of the specific bracket/division to show (e.g. `Champions`, `Monks`, `Knights`, etc.).
 
 For example, to show the Monks bracket for the TCC2 tournament, your URL would be:
