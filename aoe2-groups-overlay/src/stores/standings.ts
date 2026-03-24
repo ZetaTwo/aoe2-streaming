@@ -31,6 +31,95 @@ export interface TournamentConfig {
 }
 
 const TOURNAMENTS: Record<string, TournamentConfig> = {
+  ttlc2: {
+    sheetId: '1Sbgcyz1OjabLsEOnSHbtOmBem_0sZIpQhWnzH1diJxM',
+    brackets: [
+      {
+          name: 'Obsidian',
+          groupRanges: ['G4:P9', 'V4:AE9'],
+      },
+      {
+          name: 'Titanium',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28'],
+      },
+      {
+          name: 'Chromium',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Nickel',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Cobalt',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Copper',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Zinc',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Aluminium',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Tin',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Lead',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Steel',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Iron',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Brick',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Stone',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Granite',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Slate',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Concrete',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Gravel',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Sand',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Ash',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      },
+      {
+          name: 'Dirt',
+          groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
+      }
+    ]
+  },
   tcc2: {
     sheetId: '1uRMlH-VQpuB9Q2_2xnp70JqR1712jgJVu70cpiMMy5o',
     brackets: [
