@@ -4,11 +4,12 @@ import PlayerStandingRow from './PlayerStanding.vue'
 
 defineProps<{
   group: GroupStanding
+  groupIndex: number
 }>()
 </script>
 
 <template>
-  <div class="group-standing">
+  <div class="group-standing" :class="`group-${groupIndex}`">
     <h3 class="group-title">{{ group.name }}</h3>
     <table class="group-table">
       <thead class="group-table-head">
@@ -20,7 +21,12 @@ defineProps<{
         </tr>
       </thead>
       <tbody class="group-table-body">
-        <PlayerStandingRow v-for="player in group.players" :key="player.name" :player="player" />
+        <PlayerStandingRow
+          v-for="(player, index) in group.players"
+          :key="player.name"
+          :player="player"
+          :playerIndex="index + 1"
+        />
       </tbody>
     </table>
   </div>
