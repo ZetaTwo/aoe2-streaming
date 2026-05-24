@@ -1,0 +1,116 @@
+name: backend deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'aoe2-groups-overlay/backend/**'
+      - '.github/workflows/backend-deploy.yml'
+  pull_request:
+    paths:
+      - 'aoe2-groups-overlay/backend/**'
+      - '.github/workflows/backend-deploy.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GCP_PROJECT: aoe2-streaming
+  GCP_REGION: europe-north1
+  AR_HOST: europe-north1-docker.pkg.dev
+  AR_REPO: aoe2-groups-proxy
+  IMAGE_NAME: aoe2-groups-proxy
+  SERVICE_NAME: aoe2-groups-proxy
+
+defaults:
+  run:
+    working-directory: aoe2-groups-overlay/backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: aoe2-groups-overlay/backend -> target
+      - run: cargo test --locked
+
+  lint:
+    runs-on: ubuntu-latest
+    # NOTE: deliberately NOT a dependency of `deploy` — fmt/clippy noise must
+    # not block a fix from shipping.
+    steps:
+      - uses: actions/checkout@v6
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: aoe2-groups-overlay/backend -> target
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --tests -- -D warnings
+
+  deploy:
+    needs: test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # required for WIF
+    concurrency:
+      group: backend-deploy
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+
+      - id: auth
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.DEPLOYER_SA }}
+          # Short-lived token for docker/login-action below.
+          token_format: 'access_token'
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - uses: docker/setup-buildx-action@v4
+
+      # Authenticate the buildx builder to Artifact Registry via the WIF
+      # access token (the gcloud cred-helper isn't reliably visible inside
+      # the build container).
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.AR_HOST }}
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v7
+        env:
+          IMAGE_BASE: ${{ env.AR_HOST }}/${{ env.GCP_PROJECT }}/${{ env.AR_REPO }}/${{ env.IMAGE_NAME }}
+        with:
+          context: aoe2-groups-overlay/backend
+          push: true
+          # Keep a single-manifest image so `:<sha>` pinning stays simple
+          # (build-push-action defaults to OCI image-index with provenance).
+          provenance: false
+          tags: |
+            ${{ env.IMAGE_BASE }}:${{ github.sha }}
+            ${{ env.IMAGE_BASE }}:latest
+          # The `buildcache` tag is excluded from the AR cleanup policy
+          # (see terraform/artifact_registry.tf), so the cargo-chef dependency
+          # layer survives across CI runs.
+          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache,mode=max
+
+      - name: Update Cloud Run service
+        run: |
+          gcloud run services update ${{ env.SERVICE_NAME }} \
+            --image="${{ env.AR_HOST }}/${{ env.GCP_PROJECT }}/${{ env.AR_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
+            --region=${{ env.GCP_REGION }} \
+            --project=${{ env.GCP_PROJECT }}

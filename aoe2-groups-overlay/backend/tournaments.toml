@@ -1,0 +1,193 @@
+# Tournament routing for the groups-overlay proxy. Baked into the Docker
+# image; updating an entry requires a new image (handled by CI on push).
+#
+# - slug          maps to ?tournament=<slug> in the frontend URL
+# - sheet_id      Google Sheets document file ID (NOT a pubhtml token).
+#                 The runtime service account must be shared with the sheet
+#                 as Viewer.
+# - brackets[]    matches a sheet tab; group_ranges are the A1 ranges within
+#                 that tab — one entry per group. Order determines Group A,
+#                 Group B, …
+
+[[tournaments]]
+slug = "ttlc2"
+sheet_id = "REDACTED-TTLC2"
+
+[[tournaments.brackets]]
+name = "Obsidian"
+group_ranges = ["G4:P9", "V4:AE9"]
+
+[[tournaments.brackets]]
+name = "Titanium"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
+
+[[tournaments.brackets]]
+name = "Chromium"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Nickel"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Cobalt"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Copper"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Zinc"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Aluminium"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Tin"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Lead"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Steel"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Iron"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Brick"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Stone"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Granite"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Slate"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Concrete"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Gravel"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Sand"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Ash"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Dirt"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+
+[[tournaments]]
+slug = "tcc2"
+sheet_id = "REDACTED-TCC2"
+
+[[tournaments.brackets]]
+name = "Champions"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Monks"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Mangonels"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Knights"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Pikemen"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Longswords"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Crossbows"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Archers"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Militia"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+
+[[tournaments]]
+slug = "tsdc"
+sheet_id = "REDACTED-TSDC"
+
+[[tournaments.brackets]]
+name = "Champions"
+group_ranges = ["G4:P9", "V4:AE9"]
+
+[[tournaments.brackets]]
+name = "Monks"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Mangonels"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Knights"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Crossbows"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Militia"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+
+# spec2 divisions — placeholders. Sheet IDs and bracket layouts to be filled
+# in once we have the underlying document file IDs (the pubhtml URLs that
+# were shared are publish tokens, not the file ID Sheets API needs) and the
+# C/D column ranges for the 8-group 4x2 layout.
+[[tournaments]]
+slug = "spec2-continental"
+sheet_id = "TBD"
+brackets = []
+
+[[tournaments]]
+slug = "spec2-stronghold"
+sheet_id = "TBD"
+brackets = []
+
+[[tournaments]]
+slug = "spec2-thalassocracy"
+sheet_id = "TBD"
+brackets = []
+
+[[tournaments]]
+slug = "spec2-nomad"
+sheet_id = "TBD"
+brackets = []

@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
-  # Allows you to run this workflow manually from the Actions tab
+    paths:
+      - 'aoe2-groups-overlay/frontend/**'
+      - '.github/workflows/pages.yml'
+  pull_request:
+    paths:
+      - 'aoe2-groups-overlay/frontend/**'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -23,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./aoe2-groups-overlay
+        working-directory: ./aoe2-groups-overlay/frontend
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -38,7 +44,7 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
-          cache-dependency-path: './aoe2-groups-overlay/pnpm-lock.yaml'
+          cache-dependency-path: './aoe2-groups-overlay/frontend/pnpm-lock.yaml'
 
       - name: Install dependencies
         run: pnpm install
@@ -49,9 +55,10 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ./aoe2-groups-overlay/dist
+          path: ./aoe2-groups-overlay/frontend/dist
 
   deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

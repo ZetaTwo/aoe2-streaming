@@ -1,0 +1,4 @@
+/target
+/config.toml
+/service-account.json
+*.hash

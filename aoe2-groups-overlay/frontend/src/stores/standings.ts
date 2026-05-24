@@ -20,180 +20,8 @@ export interface BracketStanding {
   groups: GroupStanding[]
 }
 
-export interface BracketConfig {
-  name: string
-  groupRanges: string[]
-}
-
-export interface TournamentConfig {
-  sheetId: string
-  brackets: BracketConfig[]
-}
-
-const TOURNAMENTS: Record<string, TournamentConfig> = {
-  ttlc2: {
-    sheetId: 'REDACTED-TTLC2',
-    brackets: [
-      {
-        name: 'Obsidian',
-        groupRanges: ['G4:P9', 'V4:AE9'],
-      },
-      {
-        name: 'Titanium',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28'],
-      },
-      {
-        name: 'Chromium',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Nickel',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Cobalt',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Copper',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Zinc',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Aluminium',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Tin',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Lead',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Steel',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Iron',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Brick',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Stone',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Granite',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Slate',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Concrete',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Gravel',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Sand',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Ash',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Dirt',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-    ],
-  },
-  tcc2: {
-    sheetId: 'REDACTED-TCC2',
-    brackets: [
-      {
-        name: 'Champions',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Monks',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Mangonels',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Knights',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Pikemen',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Longswords',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Crossbows',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Archers',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Militia',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-    ],
-  },
-  tsdc: {
-    sheetId: 'REDACTED-TSDC',
-    brackets: [
-      {
-        name: 'Champions',
-        groupRanges: ['G4:P9', 'V4:AE9'],
-      },
-      {
-        name: 'Monks',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Mangonels',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Knights',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Crossbows',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-      {
-        name: 'Militia',
-        groupRanges: ['G4:P9', 'V4:AE9', 'G23:P28', 'V23:AE28'],
-      },
-    ],
-  },
-}
-
-export function getTournamentConfig(tournamentName: string): TournamentConfig | undefined {
-  return TOURNAMENTS[tournamentName]
+interface TournamentResponse {
+  brackets: BracketStanding[]
 }
 
 export const useStandingsStore = defineStore('standings', () => {
@@ -201,110 +29,33 @@ export const useStandingsStore = defineStore('standings', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const fetchStandings = async (sheetId: string, bracketsConfig: BracketConfig[]) => {
+  const fetchTournament = async (tournamentId: string) => {
     isLoading.value = true
     error.value = null
+    brackets.value = []
     try {
-      const apiKey = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY
-      if (!apiKey) {
-        throw new Error('Google Sheets API key is missing')
+      const baseUrl = import.meta.env.VITE_STANDINGS_PROXY_URL
+      if (!baseUrl) {
+        throw new Error('VITE_STANDINGS_PROXY_URL is not configured')
       }
-
-      const ranges = bracketsConfig.flatMap((bracket) =>
-        bracket.groupRanges.map((range) => `'${bracket.name}'!${range}`),
-      )
-      const rangesQuery = ranges.map((r) => `ranges=${encodeURIComponent(r)}`).join('&')
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?${rangesQuery}&key=${apiKey}`
-
+      const url = `${baseUrl.replace(/\/$/, '')}/tournaments/${encodeURIComponent(tournamentId)}`
       const response = await fetch(url)
 
+      if (response.status === 404) {
+        throw new Error(`Tournament not found: ${tournamentId}`)
+      }
       if (!response.ok) {
-        throw new Error(`Failed to fetch sheet data: ${response.statusText}`)
+        throw new Error(`Failed to fetch standings: ${response.statusText}`)
       }
 
-      const data = await response.json()
-
-      if (!data.valueRanges) {
-        throw new Error('Invalid data format received from Google Sheets API')
-      }
-
-      const parsedBrackets: BracketStanding[] = []
-      let rangeIndex = 0
-
-      for (const bracketConfig of bracketsConfig) {
-        const parsedGroups: GroupStanding[] = []
-        let groupIndex = 0
-
-        for (let i = 0; i < bracketConfig.groupRanges.length; i++) {
-          const rangeData = data.valueRanges[rangeIndex++]
-          const values = rangeData?.values
-          if (!values || values.length === 0) {
-            continue // Skip empty ranges
-          }
-
-          const groupName = `Group ${String.fromCharCode(65 + groupIndex)}`
-          groupIndex++
-
-          const players: PlayerStanding[] = []
-          for (let j = 0; j < values.length; j++) {
-            const row = values[j]
-
-            // Fixed indices based on layout:
-            // 0: rank, 1: name, 2: blank, 3: map diff, 4: sets won, 5: dash, 6: sets lost, 7: maps won, 8: dash, 9: maps lost
-            const rankVal = row[0]
-            const nameVal = row[1]
-
-            // Skip if no name or if name is clearly a header like "Player" or "Name"
-            if (!nameVal || typeof nameVal !== 'string') continue
-            const nameStr = nameVal.trim()
-            if (
-              nameStr === '' ||
-              nameStr.toLowerCase() === 'name' ||
-              nameStr.toLowerCase() === 'player'
-            )
-              continue
-
-            const setsWon = parseInt(row[4], 10) || 0
-            const setsLost = parseInt(row[6], 10) || 0
-            const mapsWon = parseInt(row[7], 10) || 0
-            const mapsLost = parseInt(row[9], 10) || 0
-
-            players.push({
-              name: nameStr,
-              rank: parseInt(rankVal, 10) || players.length + 1,
-              setsWon,
-              setsLost,
-              mapsWon,
-              mapsLost,
-            })
-          }
-
-          parsedGroups.push({ name: groupName, players })
-        }
-        parsedBrackets.push({ name: bracketConfig.name, groups: parsedGroups })
-      }
-
-      brackets.value = parsedBrackets
+      const data = (await response.json()) as TournamentResponse
+      brackets.value = data.brackets ?? []
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        error.value = err.message
-      } else {
-        error.value = 'An unknown error occurred'
-      }
-      throw err // Rethrow to allow component to handle it if needed
+      error.value = err instanceof Error ? err.message : 'An unknown error occurred'
     } finally {
       isLoading.value = false
     }
   }
 
-  const fetchTournament = async (tournamentId: string) => {
-    const config = getTournamentConfig(tournamentId)
-    if (!config) {
-      error.value = `Tournament configuration not found for: ${tournamentId}`
-      return
-    }
-    await fetchStandings(config.sheetId, config.brackets)
-  }
-
-  return { brackets, isLoading, error, fetchStandings, fetchTournament }
+  return { brackets, isLoading, error, fetchTournament }
 })

@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_GOOGLE_SHEETS_API_KEY: string
+  readonly VITE_STANDINGS_PROXY_URL: string
   // more env variables...
 }
 

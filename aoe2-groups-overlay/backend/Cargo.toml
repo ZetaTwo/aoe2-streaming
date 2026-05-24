@@ -1,0 +1,37 @@
+[package]
+name = "aoe2-groups-proxy"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Tournament-aware Google Sheets proxy for the aoe2streaming.zeta-two.com groups overlay"
+
+[dependencies]
+anyhow = "1"
+thiserror = "2"
+axum = "0.7"
+figment = { version = "0.10", features = ["toml", "env", "test"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+# Feature-unifies hyper-rustls onto yup-oauth2's ADC flow; service-account
+# pulls the JWT signing path used when GOOGLE_APPLICATION_CREDENTIALS points
+# at a service account key file (local dev).
+yup-oauth2 = { version = "12", default-features = false, features = ["hyper-rustls", "ring", "service-account"] }
+# Used only for the HttpConnector type in the Authenticator generic param;
+# yup-oauth2 re-exports hyper-rustls but not hyper-util.
+hyper-util = { version = "0.1", features = ["client-legacy", "http1"] }
+# Direct dep so main() can pin the rustls CryptoProvider (ring) — graph may
+# leave the process default ambiguous otherwise.
+rustls = { version = "0.23", default-features = false, features = ["ring"] }
+url = "2"
+
+[dev-dependencies]
+pretty_assertions = "1"
+
+[profile.release]
+lto = "thin"
+strip = true
