@@ -48,6 +48,13 @@ resource "google_cloud_run_v2_service" "proxy" {
     # CI owns the image. Terraform owns everything else about the service.
     ignore_changes = [
       template[0].containers[0].image,
+      # gcloud writes these into the resource on every `run services update`;
+      # by design they belong to whichever client touched the service last.
+      client,
+      client_version,
+      # Service-level scaling (separate from template.scaling above) — Cloud
+      # Run fills in defaults we don't actively manage.
+      scaling,
     ]
   }
 
