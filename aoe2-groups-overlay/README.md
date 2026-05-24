@@ -5,6 +5,7 @@ This repository provides a web-based overlay that you can easily add as a Browse
 
 - [OBS Studio Instructions](#obs-studio-instructions)
 - [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
+- [Supported Tournaments](#supported-tournaments)
 - [Changing Tournaments & Brackets](#changing-tournaments--brackets)
 - [Customization](#customization)
 
@@ -35,11 +36,23 @@ This is what it can look like once you have set it up:
 5. Set the width and height to match your canvas or desired area (e.g. `1920x1080`)
 6. Right-click the source in the list and click "Lock Position" to avoid accidental edits
 
+## Supported Tournaments
+
+| `?tournament=` | Brackets (use as `?bracket=…`) |
+|---|---|
+| `ttlc2` | Obsidian, Titanium, Chromium, Nickel, Cobalt, Copper, Zinc, Aluminium, Tin, Lead, Steel, Iron, Brick, Stone, Granite, Slate, Concrete, Gravel, Sand, Ash, Dirt |
+| `tcc2` | Champions, Monks, Mangonels, Knights, Pikemen, Longswords, Crossbows, Archers, Militia |
+| `tsdc` | Champions, Monks, Mangonels, Knights, Crossbows, Militia |
+| `spec2-continental` | Warlord, Conqueror, General, Chieftain, Commander, Warrior, Mercenary, Officer, Watcher, Recruit, Militia |
+| `spec2-stronghold` | Palace, Fortress, Castle, Krepost, Donjon, Keep, Guard, Tower, Outpost |
+| `spec2-thalassocracy` | Ocean, Coast, Archipelago, Reef, Bay, Channel, Lake, Pond, River, Beach |
+| `spec2-nomad` | Trailblazer, Explorer, Wayfarer, Pioneer, Discoverer, Traveller, Pathfinder, Vagabond, Wanderer |
+
 ## Changing Tournaments & Brackets
 
 You can change which tournament and bracket is displayed by modifying the URL parameters at the end of the link:
-- `tournament`: The ID of the tournament (e.g. `ttlc2`, `tsdc` or `tcc2`).
-- `bracket`: The name of the specific bracket/division to show (e.g. `Champions`, `Monks`, `Knights`, etc.).
+- `tournament`: The ID of the tournament — see the table above.
+- `bracket`: The name of the specific bracket/division within that tournament — also from the table above.
 
 For example, to show the Monks bracket for the TCC2 tournament, your URL would be:
 `https://aoe2streaming.zeta-two.com/?tournament=tcc2&bracket=Monks`
