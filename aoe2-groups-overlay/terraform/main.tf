@@ -46,6 +46,12 @@ variable "allowed_origins" {
   default     = ["https://aoe2streaming.zeta-two.com"]
 }
 
+variable "sheet_ids_secret_id" {
+  description = "Secret Manager secret ID holding the slug → sheet-ID TOML mapping."
+  type        = string
+  default     = "aoe2-groups-proxy-sheet-ids"
+}
+
 data "google_project" "this" {}
 
 locals {

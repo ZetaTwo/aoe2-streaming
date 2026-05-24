@@ -1,17 +1,19 @@
 # Tournament routing for the groups-overlay proxy. Baked into the Docker
 # image; updating an entry requires a new image (handled by CI on push).
 #
-# - slug          maps to ?tournament=<slug> in the frontend URL
-# - sheet_id      Google Sheets document file ID (NOT a pubhtml token).
-#                 The runtime service account must be shared with the sheet
-#                 as Viewer.
+# - slug          maps to ?tournament=<slug> in the frontend URL.
 # - brackets[]    matches a sheet tab; group_ranges are the A1 ranges within
 #                 that tab — one entry per group. Order determines Group A,
 #                 Group B, …
+#
+# Google Sheets document IDs live in a separate sheet-ids.toml file, mounted
+# at runtime from Secret Manager (see terraform/secret.tf). Adding a new
+# tournament requires both an entry here *and* a matching slug = "<sheet_id>"
+# line under [sheet_ids] in that secret. The runtime service account must
+# also be shared with each tournament's Google Sheet as Viewer.
 
 [[tournaments]]
 slug = "ttlc2"
-sheet_id = "REDACTED-TTLC2"
 
 [[tournaments.brackets]]
 name = "Obsidian"
@@ -100,7 +102,6 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
 
 [[tournaments]]
 slug = "tcc2"
-sheet_id = "REDACTED-TCC2"
 
 [[tournaments.brackets]]
 name = "Champions"
@@ -141,7 +142,6 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
 
 [[tournaments]]
 slug = "tsdc"
-sheet_id = "REDACTED-TSDC"
 
 [[tournaments.brackets]]
 name = "Champions"
@@ -168,20 +168,8 @@ name = "Militia"
 group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
 
 
-# spec2 divisions — 8 groups per bracket arranged 4-across × 2-down:
-#   row 1 (rows 4–9):   A=G:P   B=V:AE  C=AM:AV  D=BB:BK
-#   row 2 (rows 23–28): E=G:P   F=V:AE  G=AM:AV  H=BB:BK
-# All 8 ranges are listed for every bracket; the parser skips empty ones
-# without burning a group letter, so brackets with fewer groups still
-# render as Group A..N from the populated ranges.
-#
-# Each sheet must be shared with the runtime SA
-# (terraform output -raw runtime_sa) as Viewer before /tournaments/<slug>
-# returns data.
-
 [[tournaments]]
 slug = "spec2-continental"
-sheet_id = "REDACTED-SPEC2-CONTINENTAL"
 
 [[tournaments.brackets]]
 name = "Warlord"
@@ -230,7 +218,6 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
 
 [[tournaments]]
 slug = "spec2-stronghold"
-sheet_id = "REDACTED-SPEC2-STRONGHOLD"
 
 [[tournaments.brackets]]
 name = "Palace"
@@ -271,7 +258,6 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE27"]
 
 [[tournaments]]
 slug = "spec2-thalassocracy"
-sheet_id = "REDACTED-SPEC2-THALASSOCRACY"
 
 [[tournaments.brackets]]
 name = "Ocean"
@@ -316,7 +302,6 @@ group_ranges = ["G4:P9", "V4:AE9"]
 
 [[tournaments]]
 slug = "spec2-nomad"
-sheet_id = "REDACTED-SPEC2-NOMAD"
 
 [[tournaments.brackets]]
 name = "Trailblazer"

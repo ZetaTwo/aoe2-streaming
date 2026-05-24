@@ -12,7 +12,7 @@ struct RawConfig {
     #[serde(default)]
     server: RawServer,
     #[serde(default)]
-    tournaments: Vec<Tournament>,
+    tournaments: Vec<RawTournament>,
 }
 
 #[derive(Debug, Deserialize, Default)]
@@ -22,17 +22,31 @@ struct RawServer {
     allowed_origins: Option<Vec<String>>,
 }
 
+#[derive(Debug, Deserialize)]
+struct RawTournament {
+    slug: String,
+    #[serde(default)]
+    brackets: Vec<Bracket>,
+}
+
+/// Wire format of the sheet-ids secret file:
+/// `[sheet_ids]\n<slug> = "<sheet_id>"\n…`
+#[derive(Debug, Deserialize, Default)]
+struct RawSheetIds {
+    #[serde(default)]
+    sheet_ids: HashMap<String, String>,
+}
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct Bracket {
     pub name: String,
     pub group_ranges: Vec<String>,
 }
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct Tournament {
     pub slug: String,
     pub sheet_id: String,
-    #[serde(default)]
     pub brackets: Vec<Bracket>,
 }
 
@@ -50,7 +64,11 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn load(config_path: &Path, tournaments_path: &Path) -> Result<Self> {
+    pub fn load(
+        config_path: &Path,
+        tournaments_path: &Path,
+        sheet_ids_path: &Path,
+    ) -> Result<Self> {
         // tournaments.toml is baked into the image and required; config.toml is
         // optional (used for local dev or future runtime overrides).
         let mut fig = Figment::new().merge(Toml::file(tournaments_path));
@@ -67,12 +85,36 @@ impl Config {
                     config_path.display(),
                 )
             })?;
-        validate(raw)
+
+        // sheet-ids.toml lives outside the image (Secret Manager mount in prod,
+        // gitignored local file in dev). Missing / empty file is allowed at this
+        // stage — `validate` enforces presence per-slug for tournaments that
+        // have brackets configured.
+        let sheet_ids = load_sheet_ids(sheet_ids_path)?;
+
+        validate(raw, sheet_ids)
     }
 }
 
-fn validate(raw: RawConfig) -> Result<Config> {
+fn load_sheet_ids(path: &Path) -> Result<HashMap<String, String>> {
+    if !path.exists() {
+        tracing::warn!(
+            "sheet-ids file {} not found; tournaments with brackets will fail validation",
+            path.display()
+        );
+        return Ok(HashMap::new());
+    }
+    let raw: RawSheetIds = Figment::new()
+        .merge(Toml::file(path))
+        .extract()
+        .with_context(|| format!("loading sheet-ids from {}", path.display()))?;
+    Ok(raw.sheet_ids)
+}
+
+fn validate(raw: RawConfig, sheet_ids: HashMap<String, String>) -> Result<Config> {
     let mut tournaments = HashMap::with_capacity(raw.tournaments.len());
+    let mut missing_ids = Vec::new();
+
     for t in raw.tournaments {
         if t.slug.is_empty() {
             return Err(anyhow!("tournament has empty slug"));
@@ -85,9 +127,37 @@ fn validate(raw: RawConfig) -> Result<Config> {
                 ));
             }
         }
-        if tournaments.insert(t.slug.clone(), t.clone()).is_some() {
+
+        // Tournaments with no brackets are placeholders — they short-circuit
+        // to an empty response in the handler and don't need a sheet ID.
+        let sheet_id = if t.brackets.is_empty() {
+            sheet_ids.get(&t.slug).cloned().unwrap_or_default()
+        } else {
+            match sheet_ids.get(&t.slug) {
+                Some(id) if !id.trim().is_empty() => id.clone(),
+                _ => {
+                    missing_ids.push(t.slug.clone());
+                    String::new()
+                }
+            }
+        };
+
+        let slug = t.slug.clone();
+        let entry = Tournament {
+            slug,
+            sheet_id,
+            brackets: t.brackets,
+        };
+        if tournaments.insert(entry.slug.clone(), entry).is_some() {
             return Err(anyhow!("duplicate tournament slug '{}'", t.slug));
         }
+    }
+
+    if !missing_ids.is_empty() {
+        return Err(anyhow!(
+            "tournament(s) with configured brackets but no sheet_id in [sheet_ids]: {}",
+            missing_ids.join(", ")
+        ));
     }
 
     let bind_addr = raw
@@ -129,14 +199,13 @@ mod tests {
     use figment::Jail;
 
     #[test]
-    fn loads_minimal_tournaments_toml() {
+    fn loads_tournaments_and_merges_sheet_ids() {
         Jail::expect_with(|jail| {
             jail.create_file(
                 "tournaments.toml",
                 r#"
 [[tournaments]]
 slug = "ttlc2"
-sheet_id = "sheet-123"
 
 [[tournaments.brackets]]
 name = "Obsidian"
@@ -147,9 +216,17 @@ name = "Titanium"
 group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
 "#,
             )?;
+            jail.create_file(
+                "sheet-ids.toml",
+                r#"
+[sheet_ids]
+ttlc2 = "sheet-123"
+"#,
+            )?;
             let cfg = Config::load(
                 Path::new("does-not-exist-config.toml"),
                 Path::new("tournaments.toml"),
+                Path::new("sheet-ids.toml"),
             )
             .map_err(|e| e.to_string())?;
             assert_eq!(cfg.tournaments.len(), 1);
@@ -163,6 +240,80 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
     }
 
     #[test]
+    fn rejects_when_populated_tournament_missing_sheet_id() {
+        Jail::expect_with(|jail| {
+            jail.create_file(
+                "tournaments.toml",
+                r#"
+[[tournaments]]
+slug = "ttlc2"
+[[tournaments.brackets]]
+name = "Obsidian"
+group_ranges = ["G4:P9"]
+"#,
+            )?;
+            jail.create_file("sheet-ids.toml", "[sheet_ids]\n")?;
+            let err = Config::load(
+                Path::new("nope.toml"),
+                Path::new("tournaments.toml"),
+                Path::new("sheet-ids.toml"),
+            )
+            .unwrap_err()
+            .to_string();
+            assert!(err.contains("ttlc2"), "{err}");
+            assert!(err.contains("no sheet_id"), "{err}");
+            Ok(())
+        });
+    }
+
+    #[test]
+    fn allows_placeholder_tournament_with_no_brackets_and_no_id() {
+        Jail::expect_with(|jail| {
+            jail.create_file(
+                "tournaments.toml",
+                r#"
+[[tournaments]]
+slug = "spec2-nomad"
+brackets = []
+"#,
+            )?;
+            jail.create_file("sheet-ids.toml", "[sheet_ids]\n")?;
+            let cfg = Config::load(
+                Path::new("nope.toml"),
+                Path::new("tournaments.toml"),
+                Path::new("sheet-ids.toml"),
+            )
+            .map_err(|e| e.to_string())?;
+            let t = cfg.tournaments.get("spec2-nomad").unwrap();
+            assert_eq!(t.sheet_id, "");
+            assert!(t.brackets.is_empty());
+            Ok(())
+        });
+    }
+
+    #[test]
+    fn missing_sheet_ids_file_is_tolerated_for_placeholders() {
+        Jail::expect_with(|jail| {
+            jail.create_file(
+                "tournaments.toml",
+                r#"
+[[tournaments]]
+slug = "spec2-nomad"
+brackets = []
+"#,
+            )?;
+            let cfg = Config::load(
+                Path::new("nope.toml"),
+                Path::new("tournaments.toml"),
+                Path::new("also-nope.toml"),
+            )
+            .map_err(|e| e.to_string())?;
+            assert!(cfg.tournaments.contains_key("spec2-nomad"));
+            Ok(())
+        });
+    }
+
+    #[test]
     fn rejects_duplicate_slugs() {
         Jail::expect_with(|jail| {
             jail.create_file(
@@ -170,16 +321,19 @@ group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
                 r#"
 [[tournaments]]
 slug = "x"
-sheet_id = "a"
 
 [[tournaments]]
 slug = "x"
-sheet_id = "b"
 "#,
             )?;
-            let err = Config::load(Path::new("nope.toml"), Path::new("tournaments.toml"))
-                .unwrap_err()
-                .to_string();
+            jail.create_file("sheet-ids.toml", "[sheet_ids]\n")?;
+            let err = Config::load(
+                Path::new("nope.toml"),
+                Path::new("tournaments.toml"),
+                Path::new("sheet-ids.toml"),
+            )
+            .unwrap_err()
+            .to_string();
             assert!(err.contains("duplicate"), "{err}");
             Ok(())
         });
@@ -193,11 +347,16 @@ sheet_id = "b"
                 r#"
 [[tournaments]]
 slug = "a"
-sheet_id = "s"
+brackets = []
 "#,
             )?;
-            let cfg = Config::load(Path::new("nope.toml"), Path::new("tournaments.toml"))
-                .map_err(|e| e.to_string())?;
+            jail.create_file("sheet-ids.toml", "[sheet_ids]\n")?;
+            let cfg = Config::load(
+                Path::new("nope.toml"),
+                Path::new("tournaments.toml"),
+                Path::new("sheet-ids.toml"),
+            )
+            .map_err(|e| e.to_string())?;
             assert_eq!(cfg.server.bind_addr, "0.0.0.0");
             assert_eq!(cfg.server.port, 8080);
             assert!(cfg.server.allowed_origins.is_empty());

@@ -41,6 +41,26 @@ resource "google_cloud_run_v2_service" "proxy" {
         name  = "ALLOWED_ORIGINS"
         value = join(",", var.allowed_origins)
       }
+      env {
+        name  = "SHEET_IDS_PATH"
+        value = "/etc/aoe2-groups-proxy/sheet-ids.toml"
+      }
+
+      volume_mounts {
+        name       = "sheet-ids"
+        mount_path = "/etc/aoe2-groups-proxy"
+      }
+    }
+
+    volumes {
+      name = "sheet-ids"
+      secret {
+        secret = google_secret_manager_secret.sheet_ids.secret_id
+        items {
+          version = "latest"
+          path    = "sheet-ids.toml"
+        }
+      }
     }
   }
 
@@ -60,6 +80,9 @@ resource "google_cloud_run_v2_service" "proxy" {
 
   depends_on = [
     google_service_account_iam_member.deployer_act_as_runtime,
+    # Mount requires the secret to exist and the runtime SA to be able to read it.
+    google_secret_manager_secret_iam_member.runtime_reader,
+    google_secret_manager_secret_version.bootstrap,
   ]
 }
 

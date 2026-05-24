@@ -37,16 +37,34 @@ Status codes:
 - `502` — Sheets API call failed (auth, transient, or the sheet isn't
   shared with the runtime SA).
 
-## tournaments.toml
+## Config split
 
-The full tournament list (slug → sheet ID, bracket names, A1 group ranges)
-is checked in at [tournaments.toml](tournaments.toml) and baked into the
-Docker image. Adding or editing a tournament is just an edit + push to
-`main`; CI rebuilds the image and rolls a new Cloud Run revision.
+Two files feed the proxy at startup:
 
-Adding a brand-new tournament also requires sharing its Google Sheet with
-the runtime SA as **Viewer** (see [../terraform/README.md](../terraform/README.md)
-step 4 for the email and the rationale).
+- [tournaments.toml](tournaments.toml) — slugs, bracket names, A1 group
+  ranges. Checked into git, baked into the Docker image. Editing it
+  requires a new image (CI rebuilds on push to `main`).
+- `sheet-ids.toml` — `[sheet_ids]` table mapping each slug to its Google
+  Sheets document ID. **Not in git.** In production it's held in Secret
+  Manager (secret `aoe2-groups-proxy-sheet-ids`) and mounted by Cloud Run
+  at `/etc/aoe2-groups-proxy/sheet-ids.toml`. Locally, copy
+  [sheet-ids.example.toml](sheet-ids.example.toml) and fill in real IDs.
+
+The split exists because the upstream tournament sheets are configured with
+"edit with link" sharing — knowing an ID is enough to vandalize the data.
+Keeping IDs out of git removes one disclosure path; the runtime SA's
+implicit access (the SA is added as Viewer separately, see
+[../terraform/README.md](../terraform/README.md)) is what authorizes reads.
+
+Adding or editing a tournament:
+1. Edit `tournaments.toml` (slug + brackets); push to `main`.
+2. Edit your local `sheet-ids.toml`; push the new version to Secret Manager:
+   `gcloud secrets versions add aoe2-groups-proxy-sheet-ids --data-file=./sheet-ids.toml`.
+3. Share the sheet with the runtime SA as Viewer.
+
+Adding a *placeholder* tournament (e.g. before its sheet is ready) only
+needs step 1 with an empty `brackets = []`. The handler short-circuits to
+`{"brackets":[]}` without consulting Sheets, so no ID is required yet.
 
 ## Local development
 
@@ -55,13 +73,17 @@ them locally:
 
 ```sh
 # Option A: download a service-account key (do NOT check it in).
-GOOGLE_APPLICATION_CREDENTIALS=./service-account.json cargo run
+GOOGLE_APPLICATION_CREDENTIALS=./service-account.json \
+    SHEET_IDS_PATH=./sheet-ids.toml cargo run
 
 # Option B: impersonate the runtime SA with your own gcloud identity.
 gcloud auth application-default login \
     --impersonate-service-account groups-proxy@aoe2-streaming.iam.gserviceaccount.com
-cargo run
+SHEET_IDS_PATH=./sheet-ids.toml cargo run
 ```
+
+(`./sheet-ids.toml` is a gitignored copy of
+[sheet-ids.example.toml](sheet-ids.example.toml) with real IDs filled in.)
 
 Then:
 ```sh
@@ -106,6 +128,7 @@ Read at startup:
 | `ALLOWED_ORIGINS` | Comma-separated CORS origins. Empty → `*`. | empty |
 | `RUST_LOG` | Tracing env filter. | `info` |
 | `TOURNAMENTS_PATH` | Path to tournaments.toml. | `tournaments.toml` |
+| `SHEET_IDS_PATH` | Path to sheet-ids.toml (mounted from Secret Manager in prod). | `/etc/aoe2-groups-proxy/sheet-ids.toml` |
 | `CONFIG_PATH` | Optional extra TOML config file. | `config.toml` (skipped if missing) |
 | `GOOGLE_APPLICATION_CREDENTIALS` | Service-account key path. Unused on Cloud Run (metadata server takes over). | unset |
 

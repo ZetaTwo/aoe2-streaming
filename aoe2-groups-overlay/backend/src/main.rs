@@ -31,12 +31,17 @@ async fn main() -> Result<()> {
     let config_path = std::env::var_os("CONFIG_PATH")
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from("config.toml"));
+    let sheet_ids_path = std::env::var_os("SHEET_IDS_PATH")
+        .map(PathBuf::from)
+        .unwrap_or_else(|| PathBuf::from("/etc/aoe2-groups-proxy/sheet-ids.toml"));
     tracing::info!(
-        "Loading tournaments from {} (+ optional {})",
+        "Loading tournaments from {}, sheet-ids from {} (+ optional {})",
         tournaments_path.display(),
+        sheet_ids_path.display(),
         config_path.display(),
     );
-    let config = Config::load(&config_path, &tournaments_path).context("loading config")?;
+    let config =
+        Config::load(&config_path, &tournaments_path, &sheet_ids_path).context("loading config")?;
     tracing::info!("Loaded {} tournament(s)", config.tournaments.len());
 
     let sheets = SheetsClient::new()

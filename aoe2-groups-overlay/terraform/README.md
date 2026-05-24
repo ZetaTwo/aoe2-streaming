@@ -7,6 +7,8 @@ from GitHub Actions:
 - A dedicated `github-deployer` service account + IAM bindings
 - The `aoe2-groups-proxy` Artifact Registry repo
 - A runtime service account (`groups-proxy@…`) the Cloud Run service runs as
+- A Secret Manager secret (`aoe2-groups-proxy-sheet-ids`) holding the
+  slug → sheet-ID mapping, mounted into the container
 - The Cloud Run v2 service itself
 - A `roles/run.invoker = allUsers` binding so the endpoint is publicly callable
 
@@ -14,6 +16,9 @@ It does **not** manage:
 
 - Sheet sharing. Granting the runtime SA Viewer on each tournament Google
   Sheet is a Drive ACL action — done out-of-band by the operator.
+- The real payload of the sheet-ids secret. TF creates a placeholder v1; the
+  operator adds the real `[sheet_ids]` TOML as v2+ via
+  `gcloud secrets versions add` (so the IDs never enter Terraform state).
 - The image deployed to the service — CI rolls forward the image per commit;
   this module ignores `template.containers[0].image` drift on purpose.
 
@@ -30,6 +35,7 @@ gcloud services enable \
     artifactregistry.googleapis.com \
     iamcredentials.googleapis.com \
     sheets.googleapis.com \
+    secretmanager.googleapis.com \
     iam.googleapis.com \
     sts.googleapis.com
 ```
@@ -57,11 +63,39 @@ terraform apply
 Expect to see new resources for: WIF pool + provider, `github-deployer` SA,
 three IAM bindings on that SA (WIF impersonation, `run.developer`,
 `iam.serviceAccountUser` on the runtime SA), the `groups-proxy` runtime SA,
-the AR repo with cleanup policies, the Cloud Run service (booting on the
-placeholder `gcr.io/cloudrun/hello`-equivalent — `:latest` will 404 until CI
-pushes the first image), and an `allUsers` invoker binding.
+the AR repo with cleanup policies, the `aoe2-groups-proxy-sheet-ids` Secret
+Manager secret **plus a placeholder v1**, the runtime SA's
+`secretAccessor` binding on it, the Cloud Run service (mounting the secret
+and booting on `:latest`, which will 404 until CI pushes the first image),
+and an `allUsers` invoker binding.
 
-### 4. Share tournament sheets with the runtime SA
+### 4. Populate the sheet-ids secret (real v2)
+
+```sh
+cat > /tmp/sheet-ids.toml <<'EOF'
+[sheet_ids]
+ttlc2               = "REDACTED-TTLC2..."
+tcc2                = "REDACTED-TCC2-V..."
+tsdc                = "REDACTED-TSDCX..."
+spec2-continental   = "REDACTED-SPEC2-CONTINENTAL..."
+spec2-stronghold    = "REDACTED-SPEC2-STRONGHOLD..."
+spec2-thalassocracy = "REDACTED-SPEC2-THALASSOCRACY..."
+spec2-nomad         = "REDACTED-SPEC2-NOMAD..."
+EOF
+gcloud secrets versions add aoe2-groups-proxy-sheet-ids \
+    --project=aoe2-streaming --data-file=/tmp/sheet-ids.toml
+rm /tmp/sheet-ids.toml
+```
+
+This creates v2 with the real IDs; the placeholder v1 stays where it is.
+The Cloud Run service mounts `latest`, which resolves to v2 (or newer) at
+the next revision creation — so the new IDs take effect on the next image
+push to `main`.
+
+To rotate an ID later: edit your local file, `gcloud secrets versions add …`,
+push to trigger a new revision.
+
+### 5. Share tournament sheets with the runtime SA
 
 ```sh
 RUNTIME_SA=$(terraform output -raw runtime_sa)
@@ -71,7 +105,7 @@ echo "Share each tournament Google Sheet with: $RUNTIME_SA (Viewer)"
 Open each sheet in [tournaments.toml](../backend/tournaments.toml), click **Share**,
 add `$RUNTIME_SA` as Viewer.
 
-### 5. Hand the WIF outputs to GitHub
+### 6. Hand the WIF outputs to GitHub
 
 ```sh
 gh variable set WIF_PROVIDER --body "$(terraform output -raw wif_provider)"
@@ -83,7 +117,7 @@ gh variable set CLOUD_RUN_URL --body "$(terraform output -raw service_url)"
 These are stored as **repo variables** (not secrets) — none of them are
 sensitive on their own.
 
-### 6. Trigger the first deploy
+### 7. Trigger the first deploy
 
 Push to `main` (or run `make publish` from a workstation that has done
 `gcloud auth login`). CI builds the image, pushes it as `:${sha}` + `:latest`
@@ -98,5 +132,9 @@ to AR, and rolls a new Cloud Run revision via `gcloud run services update`.
   service to it.
 - **Change infra (e.g. bump memory, add an env var)**: edit the `.tf` files,
   `terraform plan`, `terraform apply`.
-- **Add a new tournament sheet**: in addition to editing tournaments.toml,
-  share the new sheet with the runtime SA as Viewer.
+- **Add a new tournament sheet**: edit tournaments.toml *and* add a line
+  under `[sheet_ids]` in a fresh local copy of sheet-ids.toml. Push the
+  TOML change, then `gcloud secrets versions add aoe2-groups-proxy-sheet-ids
+  --data-file=./sheet-ids.toml` to push the new secret version. Share the
+  sheet with the runtime SA as Viewer.
+- **Rotate a sheet ID**: same as above but only the secret needs updating.

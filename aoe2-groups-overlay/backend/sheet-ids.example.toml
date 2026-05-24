@@ -1,0 +1,31 @@
+# Template for the sheet-ids.toml file consumed by the proxy at startup.
+#
+# In production this file is held in GCP Secret Manager (secret
+# `aoe2-groups-proxy-sheet-ids`) and mounted by Cloud Run at
+# `/etc/aoe2-groups-proxy/sheet-ids.toml` — see terraform/secret.tf.
+#
+# For local development, copy this file to `./sheet-ids.toml`, fill in the
+# real document IDs, and run:
+#
+#     SHEET_IDS_PATH=./sheet-ids.toml cargo run
+#
+# The slugs here must match `[[tournaments]] slug = "…"` entries in
+# tournaments.toml. Tournaments whose brackets array is empty (placeholders)
+# don't need an entry.
+#
+# Updating the production secret:
+#
+#     gcloud secrets versions add aoe2-groups-proxy-sheet-ids \
+#         --project=aoe2-streaming --data-file=./sheet-ids.toml
+#
+# A new Cloud Run revision will pick up the new version on the next CI
+# image push (the mount resolves `latest` per revision).
+
+[sheet_ids]
+ttlc2               = "REDACTED-TTLC2"
+tcc2                = "REDACTED-TCC2"
+tsdc                = "REDACTED-TSDC"
+spec2-continental   = "REDACTED-SPEC2-CONTINENTAL"
+spec2-stronghold    = "REDACTED-SPEC2-STRONGHOLD"
+spec2-thalassocracy = "REDACTED-SPEC2-THALASSOCRACY"
+spec2-nomad         = "REDACTED-SPEC2-NOMAD"
