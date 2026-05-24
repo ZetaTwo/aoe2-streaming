@@ -4,9 +4,9 @@
 #   gcloud secrets versions add aoe2-groups-proxy-sheet-ids \
 #       --project=aoe2-streaming --data-file=./sheet-ids.toml
 #
-# Format (TOML):
+# Format (TOML) — see backend/sheet-ids.example.toml for the template:
 #   [sheet_ids]
-#   ttlc2 = "REDACTED-TTLC2..."
+#   <slug> = "<google-sheets-document-id>"
 #   …
 resource "google_secret_manager_secret" "sheet_ids" {
   secret_id = var.sheet_ids_secret_id

@@ -71,20 +71,13 @@ and an `allUsers` invoker binding.
 
 ### 4. Populate the sheet-ids secret (real v2)
 
+Use the local sheet-ids.toml (gitignored copy of
+[../backend/sheet-ids.example.toml](../backend/sheet-ids.example.toml)):
+
 ```sh
-cat > /tmp/sheet-ids.toml <<'EOF'
-[sheet_ids]
-ttlc2               = "REDACTED-TTLC2..."
-tcc2                = "REDACTED-TCC2-V..."
-tsdc                = "REDACTED-TSDCX..."
-spec2-continental   = "REDACTED-SPEC2-CONTINENTAL..."
-spec2-stronghold    = "REDACTED-SPEC2-STRONGHOLD..."
-spec2-thalassocracy = "REDACTED-SPEC2-THALASSOCRACY..."
-spec2-nomad         = "REDACTED-SPEC2-NOMAD..."
-EOF
 gcloud secrets versions add aoe2-groups-proxy-sheet-ids \
-    --project=aoe2-streaming --data-file=/tmp/sheet-ids.toml
-rm /tmp/sheet-ids.toml
+    --project=aoe2-streaming \
+    --data-file=../backend/sheet-ids.toml
 ```
 
 This creates v2 with the real IDs; the placeholder v1 stays where it is.
