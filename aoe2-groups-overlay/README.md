@@ -3,11 +3,13 @@
 When casting Age of Empires 2 tournament games, it is usually nice to be able to show the current standings of the group stages.
 This repository provides a web-based overlay that you can easily add as a Browser Source in OBS or XSplit. It fetches real-time standings directly from the tournament's Google Sheets and formats them into a clean, easy-to-read, stream-friendly grid.
 
-- [OBS Studio Instructions](#obs-studio-instructions)
-- [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
-- [Supported Tournaments](#supported-tournaments)
-- [Changing Tournaments & Brackets](#changing-tournaments--brackets)
-- [Customization](#customization)
+- [AoE2 Tournament Groups Overlay](#aoe2-tournament-groups-overlay)
+  - [Preview](#preview)
+  - [OBS Studio Instructions](#obs-studio-instructions)
+  - [XSplit Broadcaster Setup](#xsplit-broadcaster-setup)
+  - [Supported Tournaments](#supported-tournaments)
+  - [Changing Tournaments \& Brackets](#changing-tournaments--brackets)
+  - [Customization](#customization)
 
 ## Preview
 
