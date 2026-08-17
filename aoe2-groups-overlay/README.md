@@ -42,6 +42,7 @@ This is what it can look like once you have set it up:
 
 | `?tournament=` | Brackets (use as `?bracket=…`) |
 |---|---|
+| `tcc3` | Champions, Monks, Mangonels, Knights, Rams, Light Cavs, Pikemen, Longswords, Crossbows, Scouts, Archers, Militia |
 | `ttlc2` | Obsidian, Titanium, Chromium, Nickel, Cobalt, Copper, Zinc, Aluminium, Tin, Lead, Steel, Iron, Brick, Stone, Granite, Slate, Concrete, Gravel, Sand, Ash, Dirt |
 | `tcc2` | Champions, Monks, Mangonels, Knights, Pikemen, Longswords, Crossbows, Archers, Militia |
 | `tsdc` | Champions, Monks, Mangonels, Knights, Crossbows, Militia |
