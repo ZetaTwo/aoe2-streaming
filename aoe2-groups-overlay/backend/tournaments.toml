@@ -12,6 +12,58 @@
 # line under [sheet_ids] in that secret. The runtime service account must
 # also be shared with each tournament's Google Sheet as Viewer.
 
+
+[[tournaments]]
+slug = "tcc3"
+
+[[tournaments.brackets]]
+name = "Champions"
+group_ranges = ["G4:P9", "V4:AE9"]
+
+[[tournaments.brackets]]
+name = "Monks"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
+
+[[tournaments.brackets]]
+name = "Mangonels"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28"]
+
+[[tournaments.brackets]]
+name = "Knights"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Rams"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Light Cavs"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Pikemen"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Longswords"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Crossbows"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Scouts"
+group_ranges = ["G4:P9", "V4:AE9", "G23:P28", "V23:AE28"]
+
+[[tournaments.brackets]]
+name = "Archers"
+group_ranges = ["G4:P9", "V4:AE9"]
+
+[[tournaments.brackets]]
+name = "Militia"
+group_ranges = ["G4:P9", "V4:AE9"]
+
 [[tournaments]]
 slug = "ttlc2"
 
