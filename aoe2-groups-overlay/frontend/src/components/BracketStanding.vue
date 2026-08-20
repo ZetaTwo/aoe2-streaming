@@ -28,12 +28,24 @@ defineProps<{
   gap: 3rem;
 }
 
-.groups-container > :nth-child(odd) {
-  justify-self: end;
+.groups-container > .group-standing {
+  justify-self: stretch;
 }
 
-.groups-container > :nth-child(even) {
-  justify-self: start;
+.groups-container > :nth-child(odd) :deep(.group-table) {
+  margin-left: auto;
+}
+
+.groups-container > :nth-child(odd) :deep(.group-title) {
+  left: 65%;
+}
+
+.groups-container > :nth-child(even) :deep(.group-table) {
+  margin-right: auto;
+}
+
+.groups-container > :nth-child(even) :deep(.group-title) {
+  left: 35%;
 }
 
 .bracket-title {

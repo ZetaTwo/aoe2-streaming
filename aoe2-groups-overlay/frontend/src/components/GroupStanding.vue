@@ -33,13 +33,10 @@ defineProps<{
 </template>
 
 <style scoped>
-.group-standing {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .group-title {
+  position: relative;
+  width: max-content;
+  transform: translateX(-50%);
   background-color: #222;
   border: 2px solid #555;
   border-radius: 8px;
@@ -51,6 +48,7 @@ defineProps<{
 }
 
 table {
+  width: max-content;
   border-collapse: separate;
   border-spacing: 0;
   border: 2px solid #555;
