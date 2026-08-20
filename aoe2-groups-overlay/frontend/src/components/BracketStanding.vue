@@ -24,8 +24,7 @@ defineProps<{
 <style scoped>
 .groups-container {
   display: grid;
-  grid-template-columns: repeat(2, max-content);
-  justify-content: center;
+  grid-template-columns: repeat(2, 1fr);
   gap: 3rem;
 }
 
