@@ -2,7 +2,8 @@
 
 interface ImportMetaEnv {
   readonly VITE_STANDINGS_PROXY_URL: string
-  // more env variables...
+  /** Set to "true" to bypass the backend and render static fixture data instead. */
+  readonly VITE_USE_MOCK_DATA?: string
 }
 
 interface ImportMeta {

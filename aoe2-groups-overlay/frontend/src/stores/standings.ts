@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { mockBrackets } from '@/mocks/standings'
 
 export interface PlayerStanding {
   rank: number
@@ -34,6 +35,11 @@ export const useStandingsStore = defineStore('standings', () => {
     error.value = null
     brackets.value = []
     try {
+      if (import.meta.env.VITE_USE_MOCK_DATA === 'true') {
+        brackets.value = mockBrackets
+        return
+      }
+
       const baseUrl = import.meta.env.VITE_STANDINGS_PROXY_URL
       if (!baseUrl) {
         throw new Error('VITE_STANDINGS_PROXY_URL is not configured')
