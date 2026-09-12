@@ -18,12 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  GCP_PROJECT: aoe2-streaming
-  GCP_REGION: europe-north1
-  AR_HOST: europe-north1-docker.pkg.dev
-  AR_REPO: aoe2-groups-proxy
-  IMAGE_NAME: aoe2-groups-proxy
-  SERVICE_NAME: aoe2-groups-proxy
+  IMAGE_NAME: ghcr.io/zetatwo/aoe2-groups-proxy
 
 defaults:
   run:
@@ -61,56 +56,53 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write # required for WIF
+      packages: write
     concurrency:
       group: backend-deploy
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v6
 
-      - id: auth
-        uses: google-github-actions/auth@v3
-        with:
-          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
-          service_account: ${{ vars.DEPLOYER_SA }}
-          # Short-lived token for docker/login-action below.
-          token_format: 'access_token'
-
-      - uses: google-github-actions/setup-gcloud@v3
-
       - uses: docker/setup-buildx-action@v4
 
-      # Authenticate the buildx builder to Artifact Registry via the WIF
-      # access token (the gcloud cred-helper isn't reliably visible inside
-      # the build container).
       - uses: docker/login-action@v4
         with:
-          registry: ${{ env.AR_HOST }}
-          username: oauth2accesstoken
-          password: ${{ steps.auth.outputs.access_token }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push image
         uses: docker/build-push-action@v7
-        env:
-          IMAGE_BASE: ${{ env.AR_HOST }}/${{ env.GCP_PROJECT }}/${{ env.AR_REPO }}/${{ env.IMAGE_NAME }}
         with:
           context: aoe2-groups-overlay/backend
           push: true
           # Keep a single-manifest image so `:<sha>` pinning stays simple
           # (build-push-action defaults to OCI image-index with provenance).
           provenance: false
-          tags: |
-            ${{ env.IMAGE_BASE }}:${{ github.sha }}
-            ${{ env.IMAGE_BASE }}:latest
-          # The `buildcache` tag is excluded from the AR cleanup policy
-          # (see terraform/artifact_registry.tf), so the cargo-chef dependency
-          # layer survives across CI runs.
-          cache-from: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache
-          cache-to: type=registry,ref=${{ env.IMAGE_BASE }}:buildcache,mode=max
+          # Immutable per-commit tag only — GitOps wants a stable reference
+          # for the infrastructure-repo commit below, so no floating :latest.
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # The `buildcache` tag keeps the cargo-chef dependency layer across
+          # CI runs; GHCR has no separate cleanup-policy exclusion like the
+          # old Artifact Registry setup, so prune old buildcache manually if
+          # storage ever becomes a concern.
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
 
-      - name: Update Cloud Run service
+      - name: Check out infrastructure
+        uses: actions/checkout@v6
+        with:
+          repository: ZetaTwo/infrastructure
+          token: ${{ secrets.INFRA_REPO_PAT }}
+          path: infra-repo
+
+      - name: Bump image tag in infrastructure and push
+        working-directory: infra-repo
         run: |
-          gcloud run services update ${{ env.SERVICE_NAME }} \
-            --image="${{ env.AR_HOST }}/${{ env.GCP_PROJECT }}/${{ env.AR_REPO }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
-            --region=${{ env.GCP_REGION }} \
-            --project=${{ env.GCP_PROJECT }}
+          sed -i "s|image: ${{ env.IMAGE_NAME }}:.*|image: ${{ env.IMAGE_NAME }}:${{ github.sha }}|" \
+            k8s/aoe2-groups-overlay/deployment.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add k8s/aoe2-groups-overlay/deployment.yaml
+          git commit -m "chore: bump aoe2-groups-proxy to ${{ github.sha }}"
+          git push || (git pull --rebase && git push)
