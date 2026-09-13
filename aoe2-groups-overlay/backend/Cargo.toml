@@ -16,7 +16,7 @@ serde_json = "1"
 tokio = { version = "1", features = ["full"] }
 tower-http = { version = "0.6", features = ["cors", "trace"] }
 tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 # Feature-unifies hyper-rustls onto yup-oauth2's ADC flow; service-account
 # pulls the JWT signing path used when GOOGLE_APPLICATION_CREDENTIALS points
 # at a service account key file (local dev).

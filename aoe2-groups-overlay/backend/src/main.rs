@@ -22,7 +22,14 @@ async fn main() -> Result<()> {
 
     registry()
         .with(EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info")))
-        .with(fmt::layer())
+        .with(
+            fmt::layer()
+                .json()
+                .flatten_event(true)
+                .with_current_span(true)
+                .with_span_list(true)
+                .with_writer(std::io::stdout),
+        )
         .init();
 
     let tournaments_path = std::env::var_os("TOURNAMENTS_PATH")
@@ -35,14 +42,17 @@ async fn main() -> Result<()> {
         .map(PathBuf::from)
         .unwrap_or_else(|| PathBuf::from("/etc/aoe2-groups-proxy/sheet-ids.toml"));
     tracing::info!(
-        "Loading tournaments from {}, sheet-ids from {} (+ optional {})",
-        tournaments_path.display(),
-        sheet_ids_path.display(),
-        config_path.display(),
+        tournaments_path = %tournaments_path.display(),
+        config_path = %config_path.display(),
+        sheet_ids_path = %sheet_ids_path.display(),
+        "loading configuration"
     );
     let config =
         Config::load(&config_path, &tournaments_path, &sheet_ids_path).context("loading config")?;
-    tracing::info!("Loaded {} tournament(s)", config.tournaments.len());
+    tracing::info!(
+        tournament_count = config.tournaments.len(),
+        "loaded configuration"
+    );
 
     let sheets = SheetsClient::new()
         .await
@@ -57,7 +67,7 @@ async fn main() -> Result<()> {
     let listener = TcpListener::bind((bind_addr.as_str(), port))
         .await
         .with_context(|| format!("binding to {bind_addr}:{port}"))?;
-    tracing::info!("Listening on http://{bind_addr}:{port} (allowed origins: {allowed:?})");
+    tracing::info!(%bind_addr, port, ?allowed, "listening for requests");
 
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())

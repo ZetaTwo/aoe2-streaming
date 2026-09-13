@@ -21,9 +21,9 @@ impl IntoResponse for AppError {
         };
         let message = self.to_string();
         if status.is_server_error() {
-            tracing::error!("{message}");
+            tracing::error!(status = status.as_u16(), error = %message, "request failed");
         } else {
-            tracing::warn!("{message}");
+            tracing::warn!(status = status.as_u16(), error = %message, "request failed");
         }
         (status, Json(json!({ "error": message }))).into_response()
     }

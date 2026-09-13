@@ -99,8 +99,8 @@ impl Config {
 fn load_sheet_ids(path: &Path) -> Result<HashMap<String, String>> {
     if !path.exists() {
         tracing::warn!(
-            "sheet-ids file {} not found; tournaments with brackets will fail validation",
-            path.display()
+            path = %path.display(),
+            "sheet-ids file not found; tournaments with brackets will fail validation"
         );
         return Ok(HashMap::new());
     }

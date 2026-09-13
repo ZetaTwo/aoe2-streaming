@@ -8,7 +8,8 @@ use axum::{
 };
 use serde::Serialize;
 use tower_http::cors::{Any, CorsLayer};
-use tower_http::trace::TraceLayer;
+use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
+use tracing::Level;
 
 use crate::{
     config::Config,
@@ -34,7 +35,13 @@ pub fn router(state: Arc<AppState>) -> Router {
         .route("/tournaments/:slug", get(get_tournament))
         .with_state(state)
         .layer(cors)
-        .layer(TraceLayer::new_for_http())
+        .layer(
+            // tower-http's defaults are DEBUG, which the "info" default filter
+            // would otherwise drop; raise to INFO so every request is logged.
+            TraceLayer::new_for_http()
+                .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
+                .on_response(DefaultOnResponse::new().level(Level::INFO)),
+        )
 }
 
 async fn healthz() -> &'static str {
@@ -53,7 +60,10 @@ fn build_cors(origins: &[String]) -> CorsLayer {
         .filter_map(|o| HeaderValue::from_str(o).ok())
         .collect();
     if parsed.is_empty() {
-        tracing::warn!("no allowed_origins parsed as valid HeaderValue; falling back to Any");
+        tracing::warn!(
+            ?origins,
+            "no allowed_origins parsed as valid HeaderValue; falling back to Any"
+        );
         return base.allow_origin(Any);
     }
     base.allow_origin(parsed)
@@ -63,6 +73,7 @@ async fn get_tournament(
     State(state): State<Arc<AppState>>,
     Path(slug): Path<String>,
 ) -> Result<Json<TournamentResponse>, AppError> {
+    tracing::debug!(%slug, "handling tournament request");
     let tournament = state
         .config
         .tournaments
