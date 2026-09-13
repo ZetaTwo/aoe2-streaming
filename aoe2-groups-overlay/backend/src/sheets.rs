@@ -35,7 +35,11 @@ impl SheetsClient {
     }
 
     pub async fn batch_get(&self, sheet_id: &str, ranges: &[String]) -> Result<BatchGetResponse> {
-        tracing::debug!(sheet_id, range_count = ranges.len(), "fetching sheet values");
+        tracing::debug!(
+            sheet_id,
+            range_count = ranges.len(),
+            "fetching sheet values"
+        );
         let token = self
             .auth
             .token(SCOPES)
