@@ -53,8 +53,9 @@ jobs:
       - run: cargo clippy --all-targets --tests -- -D warnings
 
   # Deploys every push to main to staging (aoe2-groups.zetatwo.dev, behind
-  # the cluster's GitHub OAuth gate). Production only updates when a
-  # release is published — see deploy-production below.
+  # the cluster's login gate). Production only updates when a release is
+  # published — see deploy-production below. Both only push images and then
+  # trigger ZetaTwo/infrastructure's deploy workflow, which picks the tags.
   deploy-staging:
     needs: test
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
@@ -67,6 +68,12 @@ jobs:
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v6
+
+      # Commit time, not build time: re-running CI for an old commit must
+      # not make it the newest main-* tag.
+      - name: Resolve commit timestamp
+        id: commit
+        run: echo "epoch=$(git log -1 --format=%ct)" >> "$GITHUB_OUTPUT"
 
       - uses: docker/setup-buildx-action@v4
 
@@ -84,9 +91,12 @@ jobs:
           # Keep a single-manifest image so `:<sha>` pinning stays simple
           # (build-push-action defaults to OCI image-index with provenance).
           provenance: false
-          # Immutable per-commit tag only — deploy-production promotes this
-          # exact tag by digest, so no floating :latest.
-          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          # Immutable per-commit tags only, no floating :latest.
+          # deploy-production promotes :<sha> by digest; the infra deploy
+          # workflow pins staging to the newest main-<epoch>-<sha>.
+          tags: |
+            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.IMAGE_NAME }}:main-${{ steps.commit.outputs.epoch }}-${{ github.sha }}
           # The `buildcache` tag keeps the cargo-chef dependency layer across
           # CI runs; GHCR has no separate cleanup-policy exclusion like the
           # old Artifact Registry setup, so prune old buildcache manually if
@@ -94,23 +104,11 @@ jobs:
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
 
-      - name: Check out infrastructure
-        uses: actions/checkout@v6
+      - name: Trigger infrastructure deploy
+        uses: ZetaTwo/infrastructure/.github/actions/trigger-deploy@main
         with:
-          repository: ZetaTwo/infrastructure
-          token: ${{ secrets.INFRA_REPO_PAT }}
-          path: infra-repo
-
-      - name: Bump staging image tag in infrastructure and push
-        working-directory: infra-repo
-        run: |
-          sed -i "s|newTag: .*|newTag: ${{ github.sha }}|" \
-            k8s/aoe2-groups-proxy/overlays/staging/kustomization.yaml
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add k8s/aoe2-groups-proxy/overlays/staging/kustomization.yaml
-          git commit -m "chore: bump aoe2-groups-proxy staging to ${{ github.sha }}"
-          git push || (git pull --rebase && git push)
+          client-id: ${{ secrets.DEPLOY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
 
   # Promotes the exact image already built+pushed by deploy-staging for the
   # release's commit — retags it, never rebuilds, so what ships to
@@ -154,20 +152,8 @@ jobs:
             --tag "${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}" \
             "${{ env.IMAGE_NAME }}:${{ steps.release_sha.outputs.sha }}"
 
-      - name: Check out infrastructure
-        uses: actions/checkout@v6
+      - name: Trigger infrastructure deploy
+        uses: ZetaTwo/infrastructure/.github/actions/trigger-deploy@main
         with:
-          repository: ZetaTwo/infrastructure
-          token: ${{ secrets.INFRA_REPO_PAT }}
-          path: infra-repo
-
-      - name: Bump production image tag in infrastructure and push
-        working-directory: infra-repo
-        run: |
-          sed -i "s|newTag: .*|newTag: ${{ github.event.release.tag_name }}|" \
-            k8s/aoe2-groups-proxy/overlays/production/kustomization.yaml
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add k8s/aoe2-groups-proxy/overlays/production/kustomization.yaml
-          git commit -m "chore: promote aoe2-groups-proxy to ${{ github.event.release.tag_name }} (production)"
-          git push || (git pull --rebase && git push)
+          client-id: ${{ secrets.DEPLOY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
