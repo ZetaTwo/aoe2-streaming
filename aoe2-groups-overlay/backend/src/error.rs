@@ -20,10 +20,15 @@ impl IntoResponse for AppError {
             AppError::Upstream(_) => StatusCode::BAD_GATEWAY,
         };
         let message = self.to_string();
+        // The `message` field is the only one Vector's Discord alert forwards
+        // (see infrastructure/k8s/monitoring/vector.yaml's format_discord
+        // transform) — `status` alone as a separate field would silently
+        // vanish from the alert, so the error text must live in the event
+        // text itself, not just in a sibling field.
         if status.is_server_error() {
-            tracing::error!(status = status.as_u16(), error = %message, "request failed");
+            tracing::error!(status = status.as_u16(), "request failed: {message}");
         } else {
-            tracing::warn!(status = status.as_u16(), error = %message, "request failed");
+            tracing::warn!(status = status.as_u16(), "request failed: {message}");
         }
         (status, Json(json!({ "error": message }))).into_response()
     }

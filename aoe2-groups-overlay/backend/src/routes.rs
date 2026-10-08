@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use anyhow::Context as _;
 use axum::{
     extract::{Path, State},
     http::{HeaderValue, Method},
@@ -8,7 +9,7 @@ use axum::{
 };
 use serde::Serialize;
 use tower_http::cors::{Any, CorsLayer};
-use tower_http::trace::{DefaultMakeSpan, DefaultOnResponse, TraceLayer};
+use tower_http::trace::{DefaultMakeSpan, DefaultOnFailure, DefaultOnResponse, TraceLayer};
 use tracing::Level;
 
 use crate::{
@@ -40,7 +41,14 @@ pub fn router(state: Arc<AppState>) -> Router {
             // would otherwise drop; raise to INFO so every request is logged.
             TraceLayer::new_for_http()
                 .make_span_with(DefaultMakeSpan::new().level(Level::INFO))
-                .on_response(DefaultOnResponse::new().level(Level::INFO)),
+                .on_response(DefaultOnResponse::new().level(Level::INFO))
+                // AppError::into_response already logs one self-contained ERROR
+                // line per 5xx (with tournament/upstream context). Leaving this
+                // at its default ERROR would add a second, context-free
+                // "response failed" line for the same request, and Vector
+                // forwards only one ERROR line per app per 30s to Discord, so
+                // the two would compete for the alert slot.
+                .on_failure(DefaultOnFailure::new().level(Level::WARN)),
         )
 }
 
@@ -100,7 +108,8 @@ async fn get_tournament(
         state
             .sheets
             .batch_get(&tournament.sheet_id, &ranges)
-            .await?
+            .await
+            .with_context(|| format!("tournament '{slug}' (sheet_id '{}')", tournament.sheet_id))?
     };
 
     let brackets = parse_tournament(tournament, &response.value_ranges);
