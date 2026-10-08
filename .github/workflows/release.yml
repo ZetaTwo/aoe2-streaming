@@ -1,0 +1,36 @@
+# On a vX.Y.Z tag push: retags the tagged commit's :<sha> image as :vX.Y.Z (never
+# rebuilds), then triggers ZetaTwo/infrastructure's deploy, which picks the newest release tag.
+name: release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Promote :<sha> to the release tag
+        run: |
+          for image in ghcr.io/zetatwo/aoe2-groups-proxy; do
+            docker buildx imagetools inspect "$image:$GITHUB_SHA" > /dev/null \
+              || { echo "::error::No $image:$GITHUB_SHA. Tag a commit on main that deploy-staging built." >&2; exit 1; }
+            docker buildx imagetools create --tag "$image:$GITHUB_REF_NAME" "$image:$GITHUB_SHA"
+          done
+      - uses: ZetaTwo/infrastructure/.github/actions/trigger-deploy@main
+        with:
+          client-id: ${{ secrets.DEPLOY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.DEPLOY_APP_PRIVATE_KEY }}
