@@ -1,6 +1,5 @@
 use std::sync::Arc;
 
-use anyhow::Context as _;
 use axum::{
     extract::{Path, State},
     http::{HeaderValue, Method},
@@ -109,7 +108,11 @@ async fn get_tournament(
             .sheets
             .batch_get(&tournament.sheet_id, &ranges)
             .await
-            .with_context(|| format!("tournament '{slug}' (sheet_id '{}')", tournament.sheet_id))?
+            .map_err(|source| AppError::Upstream {
+                tournament: slug.clone(),
+                sheet_id: tournament.sheet_id.clone(),
+                source,
+            })?
     };
 
     let brackets = parse_tournament(tournament, &response.value_ranges);
